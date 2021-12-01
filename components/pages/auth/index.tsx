@@ -1,14 +1,8 @@
-import { useRouter } from "next/dist/client/router";
-import { useEffect } from "react";
+import { Replace } from "../../common";
 // check for authentication status here
 
 export const AuthComponent = () => {
-  const { replace } = useRouter();
-  useEffect(() => {
-    // check for authentication
-    replace("/auth/login");
-  }, []);
-  return <div>Auth</div>;
+  return <Replace path="/auth/signin" />;
 };
 
 export * from "./signin";
