@@ -27,7 +27,7 @@ export const Field: React.FC<FIELD_PROPS> = (props) => {
     formik.errors && accessValueByString(formik.errors, name)?.toString();
 
   let value = accessValueByString(formik.values, name);
-  if (type === "date") value = value && new Date(value);
+  // if (type === "date") value = value && new Date(value);
   const touched = accessValueByString(formik.touched, name);
   const addonPosition = addon && addon.position ? addon.position : "end";
 
@@ -36,10 +36,13 @@ export const Field: React.FC<FIELD_PROPS> = (props) => {
       return (
         <TextField
           {...rest}
+          label={rest.label && (isRequired ? `${rest.label} *` : rest.label)}
           name={name}
           type="text"
           error={error && touched}
-          helperText={error || rest.helperText}
+          helperText={
+            error && touched ? error || rest.helperText : rest.helperText
+          }
           onChange={(e) => {
             if (onChange) onChange(e);
             formik.handleChange(e);
@@ -58,10 +61,13 @@ export const Field: React.FC<FIELD_PROPS> = (props) => {
       return (
         <TextField
           {...rest}
+          label={rest.label && (isRequired ? `${rest.label} *` : rest.label)}
           name={name}
           type={passwordOpen ? "text" : "password"}
           error={error && touched}
-          helperText={error || rest.helperText}
+          helperText={
+            error && touched ? error || rest.helperText : rest.helperText
+          }
           onChange={(e) => {
             if (onChange) onChange(e);
             formik.handleChange(e);
@@ -91,36 +97,64 @@ export const Field: React.FC<FIELD_PROPS> = (props) => {
       );
     case "phone":
       return (
-        <TextField
+        <PhoneInputComponent
           {...rest}
+          label={rest.label && (isRequired ? `${rest.label} *` : rest.label)}
           name={name}
           error={error && touched}
           value={value}
-          helperText={error || rest.helperText}
+          helperText={
+            error && touched ? error || rest.helperText : rest.helperText
+          }
           onChange={(event) => {
-            let phone: any = event.target.value;
+            let phone: any = event;
             phone = filterNumbers(phone);
             if (onChange) onChange(phone);
             formik.setFieldValue(name, phone);
           }}
-          InputProps={{
-            inputComponent: (phoneNumberInputProps) =>
-              (
-                <PhoneInputComponent
-                  {...phoneNumberInputProps}
-                  inputProps={{
-                    // className: "form-control",
-                    placeholder: rest.placeholder,
-                    disabled: rest.disabled,
-                    ...rest.inputProps,
-                  }}
-                />
-              ) as any,
-          }}
-          variant="standard"
         />
+        // <TextField
+        // {...rest}
+        // name={name}
+        // error={error && touched}
+        // value={value}
+        // helperText={
+        //   error && touched ? error || rest.helperText : rest.helperText
+        // }
+        // onChange={(event) => {
+        //   let phone: any = event.target.value;
+        //   phone = filterNumbers(phone);
+        //   if (onChange) onChange(phone);
+        //   formik.setFieldValue(name, phone);
+        // }}
+        //   InputProps={{ inputComponent: PhoneInputComponent as any }}
+        //   variant="standard"
+        // />
       );
     default:
-      return <TextField {...rest} name={name} type="text" />;
+      return (
+        <TextField
+          {...rest}
+          label={rest.label && (isRequired ? `${rest.label} *` : rest.label)}
+          name={name}
+          type="text"
+          error={error && touched}
+          helperText={
+            error && touched ? error || rest.helperText : rest.helperText
+          }
+          onChange={(e) => {
+            if (onChange) onChange(e);
+            formik.handleChange(e);
+          }}
+          InputProps={{
+            [`${addonPosition}Adornment`]: addon && (
+              <InputAdornment position={addonPosition}>
+                {addon.component}
+              </InputAdornment>
+            ),
+            ...rest.InputProps,
+          }}
+        />
+      );
   }
 };

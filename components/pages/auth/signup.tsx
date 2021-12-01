@@ -1,14 +1,17 @@
-import { FullPageWrapper } from "../ui";
-import { CustomCard } from "../ui";
 import { useFormik } from "formik";
 import {
   registerUserSchema,
   REGISTER_USER_SCHEMA,
   CONFIG_TYPE,
-} from "../../data";
-import { RecursiveContainer } from "../ui";
+} from "../../../data";
+import {
+  RecursiveContainer,
+  CustomButton,
+  CustomCard,
+  FullPageWrapper,
+} from "../../ui";
 
-const SignUpComponent = () => {
+export const SignUpComponent = () => {
   const handleRegister = (data: REGISTER_USER_SCHEMA) => {
     console.log(data);
   };
@@ -53,14 +56,22 @@ const SignUpComponent = () => {
         header={{ title: "Signup" }}
         sx={{ width: "90%", maxWidth: "500px" }}
       >
-        <RecursiveContainer
-          config={registerFields}
-          formik={formik}
-          validationSchema={registerUserSchema}
-        />
+        <form onSubmit={formik.handleSubmit}>
+          <RecursiveContainer
+            config={registerFields}
+            formik={formik}
+            validationSchema={registerUserSchema}
+          />
+          <CustomButton
+            type="submit"
+            variant="contained"
+            fullWidth
+            sx={{ marginTop: 2 }}
+          >
+            Sign up
+          </CustomButton>
+        </form>
       </CustomCard>
     </FullPageWrapper>
   );
 };
-
-export default SignUpComponent;

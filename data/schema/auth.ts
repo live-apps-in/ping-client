@@ -1,11 +1,11 @@
 import { yup } from "../library-exports";
 
-export const logInUserSchema = yup.object().shape({
+export const signInUserSchema = yup.object().shape({
   email: yup.string().email("Invalid Email").required("Email is required"),
   password: yup.string().required("Password is Required"),
 });
 
-export type LOGIN_USER_SCHEMA = yup.InferType<typeof logInUserSchema>;
+export type LOGIN_USER_SCHEMA = { email: string; password: string };
 
 export const registerUserSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -23,5 +23,3 @@ export type REGISTER_USER_SCHEMA = {
   password: string;
   phone: string;
 };
-
-console.log(<REGISTER_USER_SCHEMA>{});

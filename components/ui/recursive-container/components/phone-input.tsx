@@ -1,11 +1,12 @@
 import React from "react";
-import PhoneInput from "react-phone-input-2";
+import MuiPhoneNumber from "material-ui-phone-number";
 import { PHONE_INPUT_PROPS } from "../../../../data";
 
-export const PhoneInputComponent = React.forwardRef<
-  HTMLElement,
-  PHONE_INPUT_PROPS
->(function PhoneNumber({ onChange, value, ...rest }: PHONE_INPUT_PROPS, ref) {
+export function PhoneInputComponent({
+  onChange,
+  value,
+  ...rest
+}: PHONE_INPUT_PROPS) {
   let alteredValue = `${value || ""}`;
   if (alteredValue) {
     alteredValue = alteredValue.toString();
@@ -23,23 +24,23 @@ export const PhoneInputComponent = React.forwardRef<
     };
   }
 
-  const changeHandler = (
-    value: string,
-    data: any,
-    event: React.ChangeEvent<HTMLInputElement>,
-    formattedValue: string
-  ) => {
-    if (onChange) onChange({ ...event, target: { ...event.target, value } });
+  const changeHandler = (phone: any) => {
+    if (onChange) onChange(phone);
   };
 
   return (
-    <PhoneInput
+    <MuiPhoneNumber
+      defaultCountry="ae"
+      variant="outlined"
       {...rest}
-      inputProps={inputProps}
-      country="ae"
+      inputProps={{
+        ...inputProps,
+        placeholder: rest.placeholder || inputProps.placeholder,
+        disabled: rest.disabled || inputProps.disabled,
+      }}
       disableDropdown={rest.disabled || inputProps.disabled}
       value={alteredValue}
       onChange={changeHandler}
     />
   );
-});
+}

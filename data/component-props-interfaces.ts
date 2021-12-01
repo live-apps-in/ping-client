@@ -4,9 +4,11 @@ import {
   TypographyProps,
   ReactElement,
   TextFieldProps,
-  PhoneInputProps,
+  MuiPhoneNumberProps,
   ChangeEvent,
+  ParsedUrlQueryInput,
 } from "./predefined-interfaces";
+import { ButtonProps } from "../data";
 
 // CustomCard Props
 interface CUSTOM_CARD_HEADER_PROPS {}
@@ -39,6 +41,15 @@ export interface CUSTOM_CARD_PROPS extends PaperProps {
   footer?: footer;
 }
 
+// phone input props
+
+export interface PHONE_INPUT_PROPS
+  extends Omit<MuiPhoneNumberProps, "value" | "onChange"> {
+  value?: string | number | null;
+  pattern?: string | null;
+  onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => any;
+}
+
 // Recursive component
 
 interface CONFIG_BASE {
@@ -47,28 +58,50 @@ interface CONFIG_BASE {
 }
 
 // field
-interface FIELD_TYPE {
-  type?:
-    | "text"
-    | "password"
-    | "select"
-    | "email"
-    | "color"
-    | "number"
-    | "phone"
-    | "file"
-    | "array"
-    | "date"
-    | "checkbox"
-    | "radio"
-    | "radio-multiple"
-    | "image"
-    | "component"
-    | null;
+// interface FIELD_TYPE {
+//   type?:
+//     | "text"
+//     | "password"
+//     | "select"
+//     | "email"
+//     | "color"
+//     | "number"
+//     | "phone"
+//     | "file"
+//     | "array"
+//     | "date"
+//     | "checkbox"
+//     | "radio"
+//     | "radio-multiple"
+//     | "image"
+//     | "component"
+//     | null;
+// }
+
+// type property for each field type component
+interface TEXT_FIELD_TYPE {
+  type?: "text" | "password" | "email" | "number" | "";
+}
+interface PHONE_FIELD_TYPE {
+  type?: "phone";
 }
 
 // text field
-type TEXT_FIELD_PROPS = Overwrite<TextFieldProps & CONFIG_BASE, FIELD_TYPE> & {
+type TEXT_FIELD_PROPS = Overwrite<
+  TextFieldProps & CONFIG_BASE,
+  TEXT_FIELD_TYPE
+> & {
+  // other manually defined properties
+  addon?: null | {
+    position?: "end" | "start" | null;
+    component: null | ReactElement;
+  };
+};
+// phone field
+type PHONE_FIELD_PROPS = Overwrite<
+  PHONE_INPUT_PROPS & CONFIG_BASE,
+  PHONE_FIELD_TYPE
+> & {
   // other manually defined properties
   addon?: null | {
     position?: "end" | "start" | null;
@@ -77,7 +110,7 @@ type TEXT_FIELD_PROPS = Overwrite<TextFieldProps & CONFIG_BASE, FIELD_TYPE> & {
 };
 
 // field props
-export type FIELD_PROPS = TEXT_FIELD_PROPS & {
+export type FIELD_PROPS = (TEXT_FIELD_PROPS | PHONE_FIELD_PROPS) & {
   // other manually defined properties
   validationSchema?: any;
   formik?: any;
@@ -102,12 +135,20 @@ export interface RECURSIVE_CONTAINER_PROPS {
   >;
 }
 
-// phone input props
+// custom button props
+export interface CUSTOM_BUTTON_PROPS extends ButtonProps {
+  loading?: boolean | null;
+}
 
-export interface PHONE_INPUT_PROPS
-  extends Omit<PhoneInputProps, "value" | "onChange"> {
-  value?: string | number | null;
-  required?: boolean | null;
-  pattern?: string | null;
-  onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => any;
+// common-components
+// redirect
+export interface REDIRECT_PROPS {
+  path: string;
+  query?: ParsedUrlQueryInput;
+}
+
+//replace
+export interface REPLACE_PROPS {
+  path: string;
+  query?: ParsedUrlQueryInput;
 }

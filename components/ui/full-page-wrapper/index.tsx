@@ -1,6 +1,6 @@
 import { BoxProps } from "../../../data";
 import { Box } from "../../library-components";
-import classes from "../../../assets/scss/ui-components.module.scss";
+import classes from "../../../assets/scss/ui-components/full-page-wrapper.module.scss";
 
 export const FullPageWrapper = ({ children, className, ...rest }: BoxProps) => {
   return (

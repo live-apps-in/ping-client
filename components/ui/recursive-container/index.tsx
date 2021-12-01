@@ -1,5 +1,6 @@
 import { RECURSIVE_CONTAINER_PROPS } from "../../../data";
 import { Field } from "./components";
+import classes from "../../../assets/scss/ui-components/recursive-container.module.scss";
 
 export const RecursiveContainer: React.FC<RECURSIVE_CONTAINER_PROPS> = (
   props
@@ -24,6 +25,9 @@ export const RecursiveContainer: React.FC<RECURSIVE_CONTAINER_PROPS> = (
         return (
           <Field
             {...c}
+            className={[classes["field-container"], c.className]
+              .filter((el) => el)
+              .join(" ")}
             formik={formik}
             validationSchema={validationSchema}
             key={index}
