@@ -1,0 +1,67 @@
+import { useEffect } from "react";
+import { useRoutes } from "react-router-dom";
+import { routeDefinition, Routes } from "src/routes";
+import { createEventEmitters } from "src/utils";
+import { ThemeProvider } from "src/theme";
+import { AuthProvider } from "src/provider";
+
+// redux
+import { Provider as StoreProvider } from "react-redux";
+import { store, useSelector } from "src/redux";
+
+// alert
+import { SnackbarProvider } from "notistack";
+
+// mui
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+
+// emotion cache -- to make styles available in the entire component tree
+// https://mui.com/guides/server-rendering/#heading-handling-the-request
+import { CacheProvider } from "@emotion/react";
+import createEmotionCache from "src/createEmotionCache";
+
+// to switch between light and dark mode (for future implementation)
+// and for some font style changes
+import CssBaseline from "@mui/material/CssBaseline";
+
+// react-query setup -- https://react-query.tanstack.com/quick-start
+import { QueryClientProvider, QueryClient } from "react-query";
+import { CustomModal, FlashMessage } from "./components";
+
+const clientSideEmotionCache = createEmotionCache();
+
+// react-query setup -- https://react-query.tanstack.com/quick-start
+const queryClient = new QueryClient();
+
+const App: React.FC = () => {
+  useEffect(createEventEmitters, []);
+  return (
+    <CacheProvider value={clientSideEmotionCache}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <QueryClientProvider client={queryClient}>
+          <StoreProvider store={store}>
+            <ThemeProvider>
+              <SnackbarProvider
+                maxSnack={6}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+              >
+                <CssBaseline />
+                <FlashMessage />
+                <CustomModal />
+                <AuthProvider>
+                  <Routes />
+                </AuthProvider>
+              </SnackbarProvider>
+            </ThemeProvider>
+          </StoreProvider>
+        </QueryClientProvider>
+      </LocalizationProvider>
+    </CacheProvider>
+  );
+};
+
+export default App;
