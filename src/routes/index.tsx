@@ -3,11 +3,16 @@ import { HomePage } from "src/content";
 import { ROUTE_DEFINITION } from "src/model";
 import { adminRoutes } from "./admin";
 import { authRoutes } from "./auth";
+import { Authenticated } from "src/guard";
 
 export const routeDefinition: ROUTE_DEFINITION[] = [
   {
     path: "/",
-    element: <HomePage />,
+    element: (
+      <Authenticated>
+        <HomePage />
+      </Authenticated>
+    ),
   },
   {
     path: "/auth",
