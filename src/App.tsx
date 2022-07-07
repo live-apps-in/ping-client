@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-import { useRoutes } from "react-router-dom";
-import { routeDefinition, Routes } from "src/routes";
+import { Routes } from "src/routes";
 import { createEventEmitters } from "src/utils";
 import { ThemeProvider } from "src/theme";
 import { AuthProvider } from "src/provider";
