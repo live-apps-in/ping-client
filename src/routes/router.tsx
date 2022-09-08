@@ -1,7 +1,19 @@
-import { useRoutes } from "react-router-dom";
-import { routeDefinition } from "src/routes";
+import { useRoutes, RouteProps } from "react-router-dom";
+import { routes } from "src/routes";
+
+export interface ROUTE_DEFINITION extends Omit<RouteProps, "children"> {
+  path: string;
+  children?: ROUTE_DEFINITION[];
+}
+export interface NAVIGATION_LINK {
+  name: string;
+  path: string;
+}
+
+export type ROUTES_DEFINITION = ROUTE_DEFINITION[];
+export type NAVIGATION_LINKS = NAVIGATION_LINK[];
 
 export const Routes: React.FC = () => {
-  const routes = useRoutes(routeDefinition);
-  return routes;
+  const content = useRoutes(routes);
+  return content;
 };

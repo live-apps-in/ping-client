@@ -1,35 +1,63 @@
-import { Routes } from "./router";
-import { HomePage } from "src/content";
-import { ROUTE_DEFINITION } from "src/model";
-import { adminRoutes } from "./admin";
-import { authRoutes } from "./auth";
+import { ROUTE_DEFINITION } from "src/routes";
+import { PageNotFound } from "src/components";
+import { routeDefinition } from "./definition";
+import { navigationLinks } from "./navigation-links";
+import { Helmet } from "react-helmet";
 import { Authenticated } from "src/guard";
+import { HomePageContent } from "src/content";
 
-export const routeDefinition: ROUTE_DEFINITION[] = [
+export const routes: ROUTE_DEFINITION[] = [
   {
     path: "/",
     element: (
-      <Authenticated>
-        <HomePage />
-      </Authenticated>
+      <>
+        <Helmet>
+          <title>Ping</title>
+        </Helmet>
+        <Authenticated>
+          <HomePageContent />
+        </Authenticated>
+      </>
     ),
   },
   {
-    path: "/auth",
-    children: [...authRoutes],
+    path: "/",
+    children: [...routeDefinition.auth],
   },
   {
-    path: "/admin",
-    children: [...adminRoutes.routeDefinition],
+    path: "/",
+    children: [...routeDefinition.admin],
+  },
+  // for other roles/categories use the below routing format
+  // {
+  //   path: "/other",
+  //   children: [{ path: "/other", element: <div>Other</div> }],
+  // },
+  ...routeDefinition.public,
+  {
+    path: "/404",
+    element: (
+      <>
+        <Helmet>
+          <title>Page not found - Nanban</title>
+        </Helmet>
+        <PageNotFound />
+      </>
+    ),
   },
   {
-    path: "/other",
-    children: [{ path: "/other", element: <div>Other</div> }],
+    path: "*",
+    element: (
+      <>
+        <Helmet>
+          <title>Page not found - Nanban</title>
+        </Helmet>
+        <PageNotFound />
+      </>
+    ),
   },
 ];
 
-export const sidebarStructure = {
-  admin: adminRoutes.sidebarStructure,
-};
+export { navigationLinks };
 
-export { Routes };
+export * from "./router";

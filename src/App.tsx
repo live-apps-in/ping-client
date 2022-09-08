@@ -6,7 +6,7 @@ import { AuthProvider } from "src/provider";
 
 // redux
 import { Provider as StoreProvider } from "react-redux";
-import { store, useSelector } from "src/redux";
+import { store } from "src/redux";
 
 // alert
 import { SnackbarProvider } from "notistack";

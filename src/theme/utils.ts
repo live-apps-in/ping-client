@@ -1,3 +1,4 @@
+import * as CSS from "csstype";
 import * as CustomThemes from "./variants";
 
 export enum THEME_NAMES {
@@ -20,6 +21,17 @@ export type THEME = keyof typeof customThemes;
 export function themeCreator(theme: keyof typeof customThemes) {
   return customThemes[theme];
 }
+
+// styled components CSS type
+export type CSSProperties = CSS.Properties<string | number>;
+
+export type CSSPseudos = { [K in CSS.Pseudos]?: CSSObject };
+
+export interface CSSObject extends CSSProperties, CSSPseudos {
+  [key: string]: CSSObject | string | number | undefined;
+}
+
+export type STYLES = CSSObject;
 
 declare module "@mui/material/styles" {
   interface Theme {

@@ -4,7 +4,7 @@ import { AppLoader } from "src/components";
 import { rbacSetup } from "src/data";
 import { useAuth } from "src/hooks";
 
-export const HomePage = () => {
+export const HomePageContent = () => {
   const { data } = useAuth();
   const navigate = useNavigate();
 
