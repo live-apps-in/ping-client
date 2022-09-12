@@ -59,7 +59,7 @@ export const Header = ({ navigationLinks = [], actions = null }) => {
       <StyledMobileHeaderWrapper>
         <Typography
           variant="h4"
-          sx={{ fontWeight: "bold", color: theme.colors.alpha.white[100] }}
+          sx={{ fontWeight: "bold", color: theme.colors.white }}
         >
           {title}
         </Typography>

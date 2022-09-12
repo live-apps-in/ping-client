@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const LinkStyledButton = styled(Button)(
   ({ theme }) => `
   padding: 0;
-  color: ${theme.colors.primary.main};
+  color: ${theme.colors.primary};
   text-align: left;
   font-weight: normal;
   :hover {

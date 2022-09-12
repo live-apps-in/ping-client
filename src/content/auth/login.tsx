@@ -1,3 +1,9 @@
+import { CustomText } from "src/components";
+
 export const LoginPageContent = () => {
-  return <div>login</div>;
+  return (
+    <div>
+      <CustomText>Login</CustomText>
+    </div>
+  );
 };

@@ -7,8 +7,7 @@ import { useState } from "react";
 
 const AvatarWarning = styled(Avatar)(
   ({ theme }) => `
-        background-color: ${theme.colors.warning.lighter};
-        color: ${theme.colors.warning.main};
+        color: ${theme.colors.warning};
         width: ${theme.spacing(12)};
         height: ${theme.spacing(12)};
   
@@ -21,11 +20,11 @@ const ButtonError = styled((props: CUSTOM_BUTTON_PROPS) => (
   <CustomButton {...props} />
 ))(
   ({ theme }) => `
-       background: ${theme.colors.error.main};
+       background: ${theme.colors.error};
        color: ${theme.palette.error.contrastText};
   
        &:hover {
-          background: ${theme.colors.error.dark};
+          background: ${theme.colors.error};
        }
       `
 );
