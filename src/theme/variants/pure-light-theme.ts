@@ -136,5 +136,8 @@ export const PureLightTheme = createTheme({
       fontWeight: 700,
       textTransform: "uppercase",
     },
+
+    // other components
+    Card: {},
   },
 });

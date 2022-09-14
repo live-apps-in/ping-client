@@ -3,6 +3,7 @@ import { authSetup } from "src/data";
 import { Guest } from "src/guard";
 import { ROUTES_DEFINITION } from "../router";
 import { Helmet } from "react-helmet";
+import { AuthLayout } from "src/layouts";
 
 export const authRoutes: ROUTES_DEFINITION = [
   {
@@ -13,7 +14,9 @@ export const authRoutes: ROUTES_DEFINITION = [
           <title>Login - Ping</title>
         </Helmet>
         <Guest>
-          <LoginPageContent />
+          <AuthLayout>
+            <LoginPageContent />
+          </AuthLayout>
         </Guest>
       </>
     ),

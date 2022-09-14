@@ -100,6 +100,7 @@ declare module "@mui/material/styles" {
       caption: STYLES;
       button: STYLES;
       overline: STYLES;
+      Card: STYLES;
       [ComponentName: string]: STYLES;
     };
   }

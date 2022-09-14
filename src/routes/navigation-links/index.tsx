@@ -1,8 +1,6 @@
 import { adminLayoutNavigationLinks } from "./admin";
-import { authLayoutNavigationLinks } from "./auth";
 
 export const navigationLinks = {
-  authLayout: authLayoutNavigationLinks,
   adminLayout: adminLayoutNavigationLinks,
 };
 
