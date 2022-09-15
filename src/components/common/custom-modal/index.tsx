@@ -1,9 +1,44 @@
-import { MODAL_EVENT_PROPS } from "src/model";
 import { EventEmitter } from "src/utils";
-import Dialog from "@mui/material/Dialog";
 import { useEffect, useState } from "react";
-import { ConfirmationModal } from "src/components";
-import { DialogContent, styled } from "@mui/material";
+import { ConfirmationModal, CONFIRMATION_MODAL_PROPS } from "src/components";
+import {
+  Dialog,
+  DialogContent,
+  DialogContentProps,
+  DialogProps,
+  styled,
+} from "@mui/material";
+
+// modal event
+interface MODAL_CONTAINER_PROPS extends Omit<DialogProps, "open"> {
+  closeOnClick?: boolean;
+  open?: boolean;
+}
+export interface MODAL_EVENT_PROPS_1 {
+  containerProps?: MODAL_CONTAINER_PROPS;
+  contentContainerProps?: DialogContentProps;
+  component?: CUSTOM_MODAL_COMPONENT;
+  type?: "custom";
+}
+export interface MODAL_EVENT_PROPS_2 extends CONFIRMATION_MODAL_PROPS {
+  containerProps?: MODAL_CONTAINER_PROPS;
+  contentContainerProps?: DialogContentProps;
+  type?: "confirmation";
+}
+
+export type MODAL_EVENT_PROPS = MODAL_EVENT_PROPS_1 | MODAL_EVENT_PROPS_2;
+
+export type CUSTOM_MODAL_COMPONENT = React.FC<{ onCancel: Function }>;
+export interface CUSTOM_MODAL_COMPONENT_PROPS {
+  [key: string]: any;
+  onCancel: Function;
+}
+
+declare global {
+  interface Window {
+    modal: (params: MODAL_EVENT_PROPS) => any;
+  }
+}
 
 const DialogWrapper = styled(Dialog)(
   () => `
@@ -96,3 +131,5 @@ export const CustomModal = () => {
     </DialogWrapper>
   );
 };
+
+export * from "./components";

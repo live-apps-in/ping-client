@@ -19,5 +19,6 @@ export const projectSetup = {
   title: "Ping",
   baseURL: "http://localhost:5000",
   defaultTheme: "pure-light-theme",
+  defaultPhonenumberCountry: "IN" as any,
   // defaultTheme: THEME_NAMES.PureLightTheme,
 };

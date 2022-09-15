@@ -2,7 +2,22 @@ import { EventEmitter } from "src/utils";
 import { useSnackbar } from "notistack";
 import { useEffect } from "react";
 import Slide from "@mui/material/Slide";
-import { FLASH_EVENT_PROPS } from "src/model";
+// notistack
+import type {
+  OptionsObject as NotiStackOptionsObject,
+  SnackbarMessage as NotiStackSnackbarMessage,
+} from "notistack";
+
+// flash event
+export interface FLASH_EVENT_PROPS extends NotiStackOptionsObject {
+  message?: NotiStackSnackbarMessage;
+}
+
+declare global {
+  interface Window {
+    flash: (params: FLASH_EVENT_PROPS) => any;
+  }
+}
 
 export const FlashMessage: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
