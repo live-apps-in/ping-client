@@ -108,19 +108,19 @@ export const PureLightTheme = createTheme({
       fontWeight: 500,
       margin: "5px 0",
     },
-    subtitle_one: {
+    subtitle1: {
       fontSize: 14,
       color: alpha(themeColors.black, 0.7),
     },
-    subtitle_two: {
+    subtitle2: {
       fontWeight: 400,
       fontSize: 15,
       color: alpha(themeColors.black, 0.7),
     },
-    body_one: {
+    body1: {
       fontSize: 14,
     },
-    body_two: {
+    body2: {
       fontSize: 14,
     },
     caption: {

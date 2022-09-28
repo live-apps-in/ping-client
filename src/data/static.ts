@@ -1,6 +1,7 @@
 export const authSetup = {
   authPage: "/auth/login", // exact page where the user will be redirected if not loggedin
   signupPage: "/auth/signup",
+  twoFactorAuthenticationPage: "/auth/2fa/send_otp/:email",
   homePage: "/",
   tokenAccessor: "token",
 };

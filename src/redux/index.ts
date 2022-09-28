@@ -9,6 +9,8 @@ import { reducer } from "./reducer";
 export const store = configureStore({
   reducer,
   devTools: process.env.REACT_APP_REDUX_DEV_TOOLS === "true",
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }), // to ignore "A non-serializable value was detected in an action" error
 });
 
 export type RootState = ReturnType<typeof store.getState>;

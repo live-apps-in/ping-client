@@ -6,3 +6,4 @@ export * from "./aligned-boxes";
 export * from "./custom-text";
 export * from "./custom-link";
 export * from "./custom-card";
+export * from "./recursive-container";

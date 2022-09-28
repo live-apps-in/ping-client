@@ -1,4 +1,4 @@
-import { LoginPageContent } from "src/content/auth";
+import { LoginPageContent, SendOTP } from "src/content/auth";
 import { authSetup } from "src/data";
 import { Guest } from "src/guard";
 import { ROUTES_DEFINITION } from "../router";
@@ -16,6 +16,21 @@ export const authRoutes: ROUTES_DEFINITION = [
         <Guest>
           <AuthLayout>
             <LoginPageContent />
+          </AuthLayout>
+        </Guest>
+      </>
+    ),
+  },
+  {
+    path: authSetup.twoFactorAuthenticationPage,
+    element: (
+      <>
+        <Helmet>
+          <title>Ping - 2FA</title>
+        </Helmet>
+        <Guest>
+          <AuthLayout>
+            <SendOTP />
           </AuthLayout>
         </Guest>
       </>

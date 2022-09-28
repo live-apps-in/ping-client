@@ -16,6 +16,19 @@ export function themeCreator(theme: keyof typeof customThemes) {
   return customThemes[theme] || customThemes[projectSetup.defaultTheme];
 }
 
+export const getTheme = () => {
+  try {
+    return (
+      (window.localStorage.getItem("theme") as THEME) ||
+      // THEME_NAMES.PureLightTheme
+      ("pure-light-theme" as THEME_NAMES)
+    );
+  } catch {
+    // return THEME_NAMES.PureLightTheme;
+    return "pure-light-theme" as THEME_NAMES;
+  }
+};
+
 // styled components CSS type
 export type CSSProperties = CSS.Properties<string | number>;
 
@@ -93,10 +106,10 @@ declare module "@mui/material/styles" {
       span: STYLES;
       link: STYLES;
       label: STYLES;
-      subtitle_one: STYLES;
-      subtitle_two: STYLES;
-      body_one: STYLES;
-      body_two: STYLES;
+      subtitle1: STYLES;
+      subtitle2: STYLES;
+      body1: STYLES;
+      body2: STYLES;
       caption: STYLES;
       button: STYLES;
       overline: STYLES;

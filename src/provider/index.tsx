@@ -1,2 +1,1 @@
-import { JWTAuthProvider as AuthProvider } from "./JWTAuthProvider";
-export { AuthProvider };
+export * from "./auth-provider";
