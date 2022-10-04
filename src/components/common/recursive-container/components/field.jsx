@@ -159,7 +159,7 @@ export const Field = (props) => {
             if (onChange) onChange(values);
           }}
           name={name}
-          containerProps={undefined} // to remove the "Invalid DOM property" warning in console
+          numberInputProps={undefined} // to remove the "Invalid DOM property" warning in console
           InputProps={{
             [`${addonPosition}Adornment`]: addon && (
               <InputAdornment position={addonPosition}>
@@ -169,7 +169,7 @@ export const Field = (props) => {
             ...rest.InputProps,
             inputComponent: CustomNumberInput,
           }}
-          inputProps={rest.containerProps}
+          inputProps={rest.numberInputProps}
           error={error && touched}
           helperText={
             error && touched ? error || rest.helperText : rest.helperText

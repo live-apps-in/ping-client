@@ -1,11 +1,11 @@
-import React from 'react';
-import NumberFormat from 'react-number-format';
+import React from "react";
+import NumberFormat from "react-number-format";
 
 export const CustomNumberInput = React.forwardRef(function NumberFormatCustom(
   props,
   ref
 ) {
-  const { onChange, ...other } = props;
+  const { onChange, numberInputProps, ...other } = props;
   // console.log(other.value);
   return (
     <NumberFormat
@@ -13,8 +13,9 @@ export const CustomNumberInput = React.forwardRef(function NumberFormatCustom(
       onValueChange={onChange}
       thousandSeparator
       isNumericString
-      width={'100%'}
+      width={"100%"}
       // prefix="$"
+      {...numberInputProps}
       {...other}
       saveAs={undefined}
       containerProps={undefined}

@@ -1,10 +1,11 @@
 import OtpInput from "react-otp-input";
 import { styled } from "@mui/material";
 import { CustomButton, CustomCard } from "src/components";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { authApi } from "src/api";
-import { handleError } from "src/utils";
+import { getSearchQuery, handleError } from "src/utils";
+import { useAuth } from "src/hooks";
 
 const StyledOTPPageContainer = styled("div")`
   display: grid;
@@ -21,18 +22,41 @@ const StyledOTPInput = styled(OtpInput)`
   }
 `;
 
-export const SendOTP = () => {
+export const EnterOTP = () => {
   const [submitting, setSubmitting] = useState(false);
+  const [sending, setSending] = useState(false);
   const [resending, setResending] = useState(false);
+  const { search } = useLocation();
+  const searchQuery = getSearchQuery(search);
+
+  const { validateOTP, sendOTP, sendLoginOTP, login } = useAuth();
   const [otp, setOtp] = useState("");
   const { email = "" } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    triggerOTP();
+  }, []);
+
+  const triggerOTP = async () => {
+    if (searchQuery?.login) return;
+    setSending(true);
+    try {
+      await sendOTP({ email });
+      window.flash({ message: "OTP sent successfully" });
+    } catch (err) {
+      handleError(err);
+    }
+    setSending(false);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitting(true);
     try {
-      await authApi.validateOTP({ email, otp });
-      // TODO: redirect to respective page based on whether its a signup / login
+      const data = await validateOTP({ email, otp });
+      login(data);
+      navigate("/");
     } catch (err) {
       handleError(err);
     }
@@ -44,7 +68,8 @@ export const SendOTP = () => {
   const handleResend = async () => {
     setResending(true);
     try {
-      await authApi.sendOTP(email);
+      await (searchQuery?.login ? sendLoginOTP({ email }) : sendOTP({ email }));
+      window.flash({ message: "OTP sent successfully" });
     } catch (err) {
       handleError(err);
     }

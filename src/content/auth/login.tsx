@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { styled } from "@mui/material";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
@@ -5,12 +6,14 @@ import {
   CONFIG_TYPE,
   CustomButton,
   CustomCard,
+  CustomText,
   RecursiveContainer,
 } from "src/components";
 import { useAuth } from "src/hooks";
-import { LOGIN_AUTH_DATA } from "src/model";
-import { handleError } from "src/utils";
+import { SEND_LOGIN_OTP_DETAILS } from "src/model";
+import { getSearchString, handleError } from "src/utils";
 import { Logo } from "./components";
+import { loginSchema } from "src/schema";
 
 const StyledLoginPageContainer = styled("div")`
   display: grid;
@@ -20,16 +23,24 @@ const StyledLoginPageContainer = styled("div")`
 `;
 
 export const LoginPageContent = () => {
-  const { login } = useAuth();
+  const { sendLoginOTP } = useAuth();
   const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = async (details: LOGIN_AUTH_DATA) => {
+  const handleSubmit = async (details: SEND_LOGIN_OTP_DETAILS) => {
+    setSubmitting(true);
     try {
-      // await login(details);
-      navigate(`/auth/2fa/send_otp/${details.email}`);
+      await sendLoginOTP(details);
+      window.flash({ message: "OTP sent successfully" });
+      const searchString = getSearchString(
+        { login: true },
+        { prefixQuestionMark: true }
+      );
+      navigate(`/auth/2fa/send_otp/${details.email}${searchString}`);
     } catch (err) {
       handleError(err);
     }
+    setSubmitting(false);
   };
 
   const formik = useFormik({
@@ -37,6 +48,7 @@ export const LoginPageContent = () => {
       email: "",
     },
     onSubmit: handleSubmit,
+    validationSchema: loginSchema,
   });
 
   const config: CONFIG_TYPE = [
@@ -51,8 +63,15 @@ export const LoginPageContent = () => {
       <Logo />
       <form onSubmit={formik.handleSubmit}>
         <CustomCard headerProps={{ title: "Login" }}>
-          <RecursiveContainer config={config} formik={formik} />
-          <CustomButton type="submit">Submit</CustomButton>
+          <RecursiveContainer
+            config={config}
+            formik={formik}
+            validationSchema={loginSchema}
+          />
+          <CustomButton loading={submitting} type="submit">
+            Submit
+          </CustomButton>
+          <CustomText href={"/auth/signup"}>Signup</CustomText>
         </CustomCard>
       </form>
     </StyledLoginPageContainer>

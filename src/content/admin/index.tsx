@@ -1,3 +1,13 @@
+import { CustomButton } from "src/components";
+import { useAuth } from "src/hooks";
+
 export const AdminHomeContent: React.FC = () => {
-  return <div>Admin Home</div>;
+  const { logout } = useAuth();
+
+  return (
+    <div>
+      Admin Home
+      <CustomButton onClick={() => logout()}>Logout</CustomButton>
+    </div>
+  );
 };

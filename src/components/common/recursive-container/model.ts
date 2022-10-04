@@ -178,7 +178,7 @@ interface COMPONENT_INPUT_PROPS {
 }
 // number input props
 type NUMBER_INPUT_PROPS = TextFieldProps & {
-  containerProps?: NumberFormatProps<unknown>;
+  numberInputProps?: NumberFormatProps<unknown>;
   saveAs?: "floatValue" | "formattedValue" | "value";
 };
 // masked-text input props

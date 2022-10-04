@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { getCookie } from "src/utils";
-import { authSetup } from "src/data";
+import { authSetup, projectSetup } from "src/data";
 
 export const getError = (errorObject: Error | AxiosError) => {
   if (axios.isAxiosError(errorObject)) {
@@ -36,7 +36,7 @@ export const getError = (errorObject: Error | AxiosError) => {
 
 // creating axios instance
 export const axiosInstance = axios.create({
-  baseURL: "https://api.dev.rmcgcc.com",
+  baseURL: projectSetup.baseURL,
 });
 
 // setting token in header for each request

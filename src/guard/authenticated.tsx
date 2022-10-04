@@ -21,7 +21,8 @@ export const Authenticated: React.FunctionComponent<{
       navigate(url);
     } else {
       // if the user's role doesn't match, then redirect user to 404 page
-      if (roles && !roles.includes(data.roles[0]))
+      // if (roles && !roles.includes(data.roles[0]))
+      if (roles && !roles.includes(data.role))
         navigate("/404", { replace: true });
       else setVerified(true);
     }

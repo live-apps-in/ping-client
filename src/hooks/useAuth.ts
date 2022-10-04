@@ -1,6 +1,12 @@
 import { authApi } from "src/api";
 import { authSetup } from "src/data";
-import { AUTH_DATA, LOGIN_AUTH_DATA, USE_AUTH_OPTIONS } from "src/model";
+import {
+  AUTH_DATA,
+  SEND_LOGIN_OTP_DETAILS,
+  SEND_OTP_DETAILS,
+  USE_AUTH_OPTIONS,
+  VALIDATE_OTP_DETAILS,
+} from "src/model";
 import { useSelector } from "src/redux";
 import { deleteCookie, getCookie, setCookie } from "src/utils";
 import { useActions } from "src/hooks";
@@ -28,15 +34,41 @@ export const useAuth = () => {
   }
 
   function login(
-    loginData: LOGIN_AUTH_DATA
-    // { updateRedux = true }: USE_AUTH_OPTIONS = {}
+    data: AUTH_DATA,
+    { updateRedux = true }: USE_AUTH_OPTIONS = {}
   ) {
+    if (updateRedux) authActions.login({ role: "admin", ...data });
+    setCookie(authSetup.tokenAccessor, data.token);
+    return undefined;
+  }
+
+  function sendLoginOTP(details: SEND_LOGIN_OTP_DETAILS) {
     return new Promise(async (resolve, reject) => {
       try {
-        await authApi.login(loginData);
-        // if (updateRedux) authActions.login(data);
-        // setCookie(authSetup.tokenAccessor, data.token);
+        await authApi.sendLoginOTP(details);
         resolve(undefined);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  function sendOTP(details: SEND_OTP_DETAILS) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await authApi.sendOTP(details);
+        resolve(undefined);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  function validateOTP(details: VALIDATE_OTP_DETAILS): Promise<AUTH_DATA> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const data = await authApi.validateOTP(details);
+        resolve(data);
       } catch (err) {
         reject(err);
       }
@@ -62,6 +94,14 @@ export const useAuth = () => {
     });
   }
 
-  const authUtils = { initialize, login, logout, ...auth };
+  const authUtils = {
+    initialize,
+    sendOTP,
+    sendLoginOTP,
+    validateOTP,
+    login,
+    logout,
+    ...auth,
+  };
   return authUtils;
 };

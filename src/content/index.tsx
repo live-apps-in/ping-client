@@ -11,9 +11,7 @@ export const HomePageContent = () => {
   useEffect(() => {
     if (data) {
       navigate(
-        `${
-          rbacSetup.homePage[data?.roles[0] as keyof typeof rbacSetup.homePage]
-        }`,
+        `${rbacSetup.homePage[data?.role as keyof typeof rbacSetup.homePage]}`,
         { replace: true }
       );
     }

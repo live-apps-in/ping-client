@@ -1,24 +1,27 @@
-import { AUTH_DATA, LOGIN_AUTH_DATA, VALIDATE_OTP_DETAILS } from "src/model";
+import {
+  AUTH_DATA,
+  SEND_LOGIN_OTP_DETAILS,
+  SEND_OTP_DETAILS,
+  VALIDATE_OTP_DETAILS,
+} from "src/model";
 import { axiosInstance, createApiFunction } from "src/utils";
 
 class AuthApi {
-  login(loginData: LOGIN_AUTH_DATA): Promise<void> {
-    return createApiFunction(() =>
-      axiosInstance.post("/auth/login", loginData)
-    );
-  }
   initialize(): Promise<AUTH_DATA> {
     return createApiFunction(() => axiosInstance.get("/auth/refresh"));
   }
   logout(): Promise<void> {
     return createApiFunction(() => axiosInstance.get("/auth/logout"));
   }
-  sendOTP(email: string): Promise<void> {
+  sendLoginOTP(details: SEND_LOGIN_OTP_DETAILS) {
+    return createApiFunction(() => axiosInstance.post("/auth/login", details));
+  }
+  sendOTP(details: SEND_OTP_DETAILS) {
     return createApiFunction(() =>
-      axiosInstance.get(`/auth/2fa/send_otp/${email}`)
+      axiosInstance.get(`/auth/2fa/send_otp/${details.email}`)
     );
   }
-  validateOTP(details: VALIDATE_OTP_DETAILS): Promise<void> {
+  validateOTP(details: VALIDATE_OTP_DETAILS): Promise<AUTH_DATA> {
     return createApiFunction(() =>
       axiosInstance.post("/auth/2fa/otp/validate", details)
     );
