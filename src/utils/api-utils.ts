@@ -22,8 +22,8 @@ export const getError = (errorObject: Error | AxiosError) => {
         error = {
           ...errorObject.response,
           message:
-            `${errorObject.response?.data}` ||
-            // errorObject.response?.data?.message ||
+            errorObject.response?.data["error"] ||
+            errorObject.message ||
             "Failed to process your request",
         };
       }

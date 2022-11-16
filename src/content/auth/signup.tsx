@@ -19,11 +19,14 @@ export const SignupPageContent = () => {
 
   const handleSubmit = async (data: SIGNUP_USER_DETAILS) => {
     setSubmitting(true);
-    data.user_name = data.user_name + "#" + data.tag;
-    delete data.tag;
+    const updatedData = {
+      ...data,
+      user_name: data.user_name + "#" + data.tag,
+    };
+    delete updatedData.tag;
     try {
-      await userApi.signup(data);
-      navigate(`/auth/2fa/send_otp/${data.email}`);
+      await userApi.signup(updatedData);
+      navigate(`/auth/2fa/send_otp/${updatedData.email}`);
     } catch (err) {
       handleError(err);
     }
