@@ -82,26 +82,28 @@ export const CustomModal = () => {
       containerProps: _containerProps,
       ...confirmationModalProps
     } = modalDetails;
-    ModalBody = (params) => (
-      <ConfirmationModal
-        {...params}
-        {...confirmationModalProps}
-        sx={{
-          minWidth: 500,
-          // ...confirmationModalProps?.sx
-        }}
-        onConfirm={async (event) => {
-          if (confirmationModalProps.onConfirm)
-            await confirmationModalProps.onConfirm(event);
-          setVisible(false);
-        }}
-        onCancel={async (event) => {
-          if (confirmationModalProps.onCancel)
-            await confirmationModalProps.onCancel(event);
-          setVisible(false);
-        }}
-      />
-    );
+    ModalBody = function ModelBody (params) {
+      return (
+        <ConfirmationModal
+          {...params}
+          {...confirmationModalProps}
+          sx={{
+            minWidth: 500,
+            // ...confirmationModalProps?.sx
+          }}
+          onConfirm={async (event) => {
+            if (confirmationModalProps.onConfirm)
+              await confirmationModalProps.onConfirm(event);
+            setVisible(false);
+          }}
+          onCancel={async (event) => {
+            if (confirmationModalProps.onCancel)
+              await confirmationModalProps.onCancel(event);
+            setVisible(false);
+          }}
+        />
+      );
+    };
   }
 
   return (
