@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Start New Container') {
             steps {
-                echo 'docker run -p 3000:3000 -d --name ping-client ping-client'
+                sh 'docker run -p 3000:3000 -d --name ping-client ping-client'
             }
         }
     }
