@@ -9,8 +9,8 @@ export const authSetup = {
 };
 
 export const projectSetup = {
-  title: "Nanban",
-  baseURL: "http://localhost:5000",
+  title: "Ping",
+  baseURL: "https://api.ping.jagalive.in",
   defaultTheme: "pure-light-theme",
   defaultPhonenumberCountry: "IN" as any,
   // defaultTheme: THEME_NAMES.PureLightTheme,

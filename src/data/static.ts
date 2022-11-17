@@ -18,7 +18,7 @@ export const rbacSetup = {
 
 export const projectSetup = {
   title: "Ping",
-  baseURL: "http://localhost:5000",
+  baseURL: "https://api.ping.jagalive.in",
   defaultTheme: "pure-light-theme",
   defaultPhonenumberCountry: "IN" as any,
   // defaultTheme: THEME_NAMES.PureLightTheme,
