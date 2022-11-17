@@ -9,7 +9,7 @@
 /coverage
 
 # production
-/build
+#/build currently building locally due to server load - TEMPORARY
 
 # misc
 .DS_Store
