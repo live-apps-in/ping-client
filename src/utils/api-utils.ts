@@ -71,10 +71,10 @@ axiosInstance.interceptors.request.use(
 
 // configuration to get upload progress(in percentage)
 
-export var withUploadProgress = (callBack: Function) => {
+export const withUploadProgress = (callBack: Function) => {
   return {
     onUploadProgress: function (progressEvent: any) {
-      var percentCompleted = Math.round(
+      const percentCompleted = Math.round(
         (progressEvent.loaded * 100) / progressEvent.total
       );
       callBack(percentCompleted);
