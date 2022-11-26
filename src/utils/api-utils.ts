@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { getCookie, isPublicRoute, isAuthRoute, deleteCookie } from "src/utils";
+import { getCookie } from "src/utils";
 import { authSetup, projectSetup } from "src/data";
 
 export const getError = (errorObject: Error | AxiosError) => {
@@ -53,22 +53,21 @@ axiosInstance.interceptors.request.use(
 );
 
 // globally logout the user, if 401 occurs
-axiosInstance.interceptors.response.use(undefined, async (error) => {
-  // logout if unauthenticated or token expired
-  if (error.response?.status === 401) {
-    // don't redirect to logout route if the current page is a public page or login page
-    if (
-      !isPublicRoute(window.location.pathname) &&
-      !isAuthRoute(window.location.pathname)
-    ) {
-      deleteCookie('token');
-      window.location.pathname = authSetup.authPage;
-      return;
-    }
-    //   window.location.href = '/logout';
-  }
-  return Promise.reject(error);
-});
+// axiosInstance.interceptors.response.use(undefined, async (error) => {
+//   // logout if unauthenticated or token expired
+//   if (error.response?.status === 401) {
+//     // don't redirect to logout route if the current page is a public page or login page
+//     if (
+//       !isPublicRoute(window.location.pathname) &&
+//       !isAuthRoute(window.location.pathname)
+//     ) {
+//       deleteCookie('token');
+//       window.location.pathname = '/auth/login';
+//     }
+//     //   window.location.href = '/logout';
+//   }
+//   return Promise.reject(error);
+// });
 
 // configuration to get upload progress(in percentage)
 

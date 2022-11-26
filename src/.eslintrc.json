@@ -38,10 +38,10 @@
         "react/jsx-uses-react": "off",
         "react/react-in-jsx-scope": "off",
         "no-async-promise-executor": "off",
-        "no-useless-escape": "off",
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "no-useless-escape": "off"
     }
 }

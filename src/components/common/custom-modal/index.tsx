@@ -82,8 +82,8 @@ export const CustomModal = () => {
       containerProps: _containerProps,
       ...confirmationModalProps
     } = modalDetails;
-    ModalBody = function ModelBody (params) {
-      return (
+    ModalBody = function ModalBody (params) {
+        return (
         <ConfirmationModal
           {...params}
           {...confirmationModalProps}
@@ -102,8 +102,8 @@ export const CustomModal = () => {
             setVisible(false);
           }}
         />
-      );
-    };
+      )
+    }
   }
 
   return (
