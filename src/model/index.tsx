@@ -3,6 +3,7 @@ export interface AUTH_DATA {
   name: string;
   email: string;
   token: string;
+  refreshToken: string;
   role: string;
   _id?: string;
   image?: string | null;

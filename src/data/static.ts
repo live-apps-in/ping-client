@@ -4,6 +4,7 @@ export const authSetup = {
   twoFactorAuthenticationPage: "/auth/2fa/send_otp/:email",
   homePage: "/",
   tokenAccessor: "token",
+  refreshTokenAccessor: 'refreshToken'
 };
 
 // #rbac-setup

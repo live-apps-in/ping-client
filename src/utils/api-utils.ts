@@ -1,6 +1,7 @@
-import axios, { AxiosError } from "axios";
-import { getCookie } from "src/utils";
+import axios, { AxiosError, AxiosRequestConfig, AxiosInstance as AxiosInstanceOriginal } from "axios";
+import { getCookie, isPublicRoute, isAuthRoute, deleteCookie } from "src/utils";
 import { authSetup, projectSetup } from "src/data";
+import { authApi } from "src/api";
 
 export const getError = (errorObject: Error | AxiosError) => {
   if (axios.isAxiosError(errorObject)) {
@@ -34,40 +35,103 @@ export const getError = (errorObject: Error | AxiosError) => {
   }
 };
 
-// creating axios instance
-export const axiosInstance = axios.create({
-  baseURL: projectSetup.baseURL,
-});
-
-// setting token in header for each request
-axiosInstance.interceptors.request.use(
-  (config) => {
-    let token = getCookie(authSetup.tokenAccessor); // getting token from cookies
-    if (token && config.headers)
-      config.headers["Authorization"] = `Bearer ${token}`;
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+interface IAxiosInstance {
+  axiosInstance: AxiosInstanceOriginal,
+  setupHeadersForRequestInterceptors: (options?: { Authorization?: string, 'x-refresh-token'?: string }) => void;
+  includeRefreshTokenLogic: () => void;
+}
+export class AxiosInstance implements IAxiosInstance {
+  axiosInstance;
+  constructor(config?: AxiosRequestConfig<any> & { setupCustomizations?: boolean }) {
+    const { setupCustomizations = true, ...rest } = config
+    this.axiosInstance = axios.create({
+      baseURL: projectSetup.baseURL,
+      ...rest
+    });
+    if(setupCustomizations) {
+      this.setupHeadersForRequestInterceptors()
+      this.includeRefreshTokenLogic()
+    }
+    return this.axiosInstance;
   }
-);
 
-// globally logout the user, if 401 occurs
-// axiosInstance.interceptors.response.use(undefined, async (error) => {
-//   // logout if unauthenticated or token expired
-//   if (error.response?.status === 401) {
-//     // don't redirect to logout route if the current page is a public page or login page
-//     if (
-//       !isPublicRoute(window.location.pathname) &&
-//       !isAuthRoute(window.location.pathname)
-//     ) {
-//       deleteCookie('token');
-//       window.location.pathname = '/auth/login';
-//     }
-//     //   window.location.href = '/logout';
-//   }
-//   return Promise.reject(error);
-// });
+  setupHeadersForRequestInterceptors(options?: { Authorization?: string, 'x-refresh-token'?: string }) {
+    // setting token in header for each request
+    this.axiosInstance.interceptors.request.use(
+      (config) => {
+        let token = getCookie(authSetup.tokenAccessor); // getting token from cookies
+        let refreshToken = getCookie(authSetup.refreshTokenAccessor); // getting token from cookies
+        if (token && config.headers) {
+          // defaults
+          config.headers['Authorization'] = `Bearer ${token}`;
+          config.headers['x-refresh-token'] = refreshToken;
+          // other (overwrites stuff if needed)
+          Object.keys(options).forEach(key => {
+            config.headers[key] = options[key];
+          })
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+  }
+
+  includeRefreshTokenLogic() {
+    // globally logout the user, if 401 occurs
+    this.axiosInstance.interceptors.response.use(undefined, async (error) => {
+      // logout if unauthenticated or token expired
+      if (error.response?.status === 401) {
+        const refreshToken = getCookie(authSetup.refreshTokenAccessor)
+        // redirect to auth route, if you don't have the refreshToken and the current route is not public route
+        if (!refreshToken) {
+          deleteCookie(authSetup.tokenAccessor);
+          if(!isPublicRoute(window.location.pathname) && !isAuthRoute(window.location.pathname)) {
+            window.location.pathname = authSetup.authPage;
+            return;
+          }
+        }
+        else {
+          // retry api call after getting access token using the refreshToken we have
+
+          const apiCallConfig = error.config;
+          try {
+            console.log('fetching access token');
+            const { accessToken } = await authApi.getAccessTokenFromRefreshToken(refreshToken);
+            console.log(accessToken)
+            const newAxiosInstance = new AxiosInstance({ setupCustomizations: false });
+            newAxiosInstance.setupHeadersForRequestInterceptors({ Authorization: `Bearer ${accessToken}`, "x-refresh-token": refreshToken });
+            const data = await newAxiosInstance(apiCallConfig);
+            return Promise.resolve(data);
+          }
+          catch(err) {
+            alert('refresh token got rejected');
+            // this block will be triggered, if refresh token is expired too
+            if(err.response?.status === 401) {
+              deleteCookie(authSetup.tokenAccessor);
+              deleteCookie(authSetup.refreshTokenAccessor);
+              // at this point the user is completely not eligible to be logged in
+              // redirect the user to auth route, if it's not auth route
+              if(!isPublicRoute(window.location.pathname) && !isAuthRoute(window.location.pathname)) {
+                window.location.pathname = authSetup.authPage;
+                return;
+              }
+              return Promise.reject(err);
+            }
+            return Promise.reject(err);
+          }
+        }
+        return Promise.reject(error);
+        //   window.location.href = '/logout';
+      }
+      return Promise.reject(error);
+    });
+  }
+  
+}
+
+export const axiosInstance = new AxiosInstance()
 
 // configuration to get upload progress(in percentage)
 

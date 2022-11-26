@@ -1,3 +1,5 @@
+import axios from "axios";
+import { projectSetup } from "src/data";
 import {
   AUTH_DATA,
   SEND_LOGIN_OTP_DETAILS,
@@ -25,6 +27,20 @@ class AuthApi {
     return createApiFunction(() =>
       axiosInstance.post("/auth/2fa/otp/validate", details)
     );
+  }
+  getAccessTokenFromRefreshToken(refreshToken: AUTH_DATA['refreshToken']): Promise<{ accessToken: AUTH_DATA['token'] }> {
+    const newAxiosInstance = axios.create({ 
+      baseURL:projectSetup.baseURL, 
+      headers: { 
+        // set refreshToken as Bearer token to get a new accessToken
+        'x-refresh-token': refreshToken
+      } 
+    });
+    return createApiFunction(() => 
+    // use a new axios instance instead of existing axiosInstance to not include the refresh token logic for this api call
+    // else it will create an infinite loop
+      newAxiosInstance.get("/auth/token/refresh")
+    )
   }
 }
 

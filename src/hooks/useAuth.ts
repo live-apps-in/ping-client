@@ -20,9 +20,10 @@ export const useAuth = () => {
   }: USE_AUTH_OPTIONS = {}): Promise<AUTH_DATA> {
     return new Promise(async (resolve, reject) => {
       try {
-        const token = getCookie("token");
+        const token = getCookie(authSetup.tokenAccessor);
         if (!token) throw new Error("Session expired");
         const data = await authApi.initialize();
+        data.role = "admin";
         if (updateRedux)
           authActions.initialize({ data, isAuthenticated: true });
         resolve(data);
@@ -39,6 +40,7 @@ export const useAuth = () => {
   ) {
     if (updateRedux) authActions.login({ role: "admin", ...data });
     setCookie(authSetup.tokenAccessor, data.token);
+    setCookie(authSetup.refreshTokenAccessor, data.refreshToken);
     return undefined;
   }
 
