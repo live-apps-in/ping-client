@@ -102,8 +102,8 @@ export const CustomModal = () => {
             setVisible(false);
           }}
         />
-      )
-    }
+      );
+    };
   }
 
   return (
