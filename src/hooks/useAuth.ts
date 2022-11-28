@@ -1,4 +1,4 @@
-import { authApi } from "src/api";
+import { userApi, authApi } from "src/api";
 import { authSetup } from "src/data";
 import {
   AUTH_DATA,
@@ -6,6 +6,7 @@ import {
   SEND_OTP_DETAILS,
   USE_AUTH_OPTIONS,
   VALIDATE_OTP_DETAILS,
+  VALIDATE_OTP_RESPONSE,
 } from "src/model";
 import { useSelector } from "src/redux";
 import { deleteCookie, getCookie, setCookie } from "src/utils";
@@ -21,8 +22,13 @@ export const useAuth = () => {
     return new Promise(async (resolve, reject) => {
       try {
         const token = getCookie(authSetup.tokenAccessor);
-        if (!token) throw new Error("Session expired");
-        const data = await authApi.initialize();
+        if (!token) {
+          deleteCookie(authSetup.refreshTokenAccessor);
+          throw new Error("Session expired");
+        }
+        // initialize the app by fetching details from profile route (initialize function is replaced by profile route)
+        const data = await userApi.profile();
+        // we don't need to store token and refresh token in the redux. those only should be used from cookies
         data.role = "admin";
         if (updateRedux)
           authActions.initialize({ data, isAuthenticated: true });
@@ -34,13 +40,18 @@ export const useAuth = () => {
     });
   }
 
-  function login(
-    data: AUTH_DATA,
+  async function login(
+    data: VALIDATE_OTP_RESPONSE,
     { updateRedux = true }: USE_AUTH_OPTIONS = {}
   ) {
-    if (updateRedux) authActions.login({ role: "admin", ...data });
     setCookie(authSetup.tokenAccessor, data.token);
     setCookie(authSetup.refreshTokenAccessor, data.refreshToken);
+    // fetch auth data from profile (similar action while we initialize our app)
+    const authData = await userApi.profile();
+    // we don't need to store token and refresh token in the redux. those only should be used from cookies
+    delete authData['token'];
+    delete authData['refreshToken'];
+    if (updateRedux) authActions.login({ role: "admin", ...authData });
     return undefined;
   }
 
@@ -66,7 +77,7 @@ export const useAuth = () => {
     });
   }
 
-  function validateOTP(details: VALIDATE_OTP_DETAILS): Promise<AUTH_DATA> {
+  function validateOTP(details: VALIDATE_OTP_DETAILS): Promise<VALIDATE_OTP_RESPONSE> {
     return new Promise(async (resolve, reject) => {
       try {
         const data = await authApi.validateOTP(details);
@@ -84,12 +95,14 @@ export const useAuth = () => {
       try {
         await authApi.logout();
         deleteCookie(authSetup.tokenAccessor);
+        deleteCookie(authSetup.refreshTokenAccessor);
         window.location.reload();
         if (updateRedux) authActions.logout();
         resolve();
       } catch (err) {
         if (updateRedux) authActions.logout();
         deleteCookie(authSetup.tokenAccessor);
+        deleteCookie(authSetup.refreshTokenAccessor);
         window.location.reload();
         reject(err);
       }

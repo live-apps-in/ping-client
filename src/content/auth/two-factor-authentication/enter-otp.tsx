@@ -3,7 +3,6 @@ import { styled } from "@mui/material";
 import { CustomButton, CustomCard } from "src/components";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { authApi } from "src/api";
 import { getSearchQuery, handleError } from "src/utils";
 import { useAuth } from "src/hooks";
 
@@ -55,7 +54,7 @@ export const EnterOTP = () => {
     setSubmitting(true);
     try {
       const data = await validateOTP({ email, otp });
-      login(data);
+      await login(data);
       navigate("/");
     } catch (err) {
       handleError(err);

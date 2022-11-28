@@ -5,6 +5,9 @@ class UserApi {
   signup(details: SIGNUP_USER_DETAILS): Promise<AUTH_DATA> {
     return createApiFunction(() => axiosInstance.post("/user/signup", details));
   }
+  profile(): Promise<AUTH_DATA> {
+    return createApiFunction(() => axiosInstance.get("/user/profile"));
+  }
 }
 
 export const userApi = new UserApi();

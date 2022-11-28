@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosInstance as AxiosInstanceOriginal } from "axios";
+import axios, { AxiosError, AxiosRequestConfig, AxiosInstance } from "axios";
 import { getCookie, isPublicRoute, isAuthRoute, deleteCookie, setCookie } from "src/utils";
 import { authSetup, projectSetup } from "src/data";
 import { authApi } from "src/api";
@@ -34,14 +34,13 @@ export const getError = (errorObject: Error | AxiosError) => {
     return errorObject;
   }
 };
-
 interface IAxiosInstance {
-  axiosInstance: AxiosInstanceOriginal,
+  axiosInstance: AxiosInstance,
   setupHeadersForRequestInterceptors: (options?: { Authorization?: string, 'x-refresh-token'?: string }) => void;
   includeRefreshTokenLogic: () => void;
 }
-export class AxiosInstance implements IAxiosInstance {
-  axiosInstance: AxiosInstanceOriginal;
+export class CustomAxios implements IAxiosInstance {
+  axiosInstance: AxiosInstance;
   constructor(config: AxiosRequestConfig<any> & { setupCustomizations?: boolean } = {}) {
     const { setupCustomizations = true, ...rest } = config;
     this.axiosInstance = axios.create({
@@ -79,6 +78,8 @@ export class AxiosInstance implements IAxiosInstance {
         return Promise.reject(error);
       }
     );
+    // return this to call other functions when this function has been implemented and stored in a variable.
+    return this;
   }
 
   includeRefreshTokenLogic() {
@@ -103,14 +104,14 @@ export class AxiosInstance implements IAxiosInstance {
             const { accessToken } = await authApi.getAccessTokenFromRefreshToken(refreshToken);
             // setup the new access token to cookie
             setCookie(authSetup.tokenAccessor, accessToken);
-            const newAxiosInstanceSetup = new AxiosInstance({ setupCustomizations: false });
-            newAxiosInstanceSetup.setupHeadersForRequestInterceptors({ Authorization: `Bearer ${accessToken}`, "x-refresh-token": refreshToken });
-            const newAxiosInstance = newAxiosInstanceSetup.create();
-            const data = await newAxiosInstance(apiCallConfig);
-            return Promise.resolve(data);
+            const newAxiosInstance = 
+              new CustomAxios({ setupCustomizations: false })
+              .setupHeadersForRequestInterceptors({ Authorization: `Bearer ${accessToken}`, "x-refresh-token": refreshToken })
+              .create();
+            const response = await newAxiosInstance(apiCallConfig);
+            return Promise.resolve(response);
           }
           catch(err) {
-            alert('refresh token got rejected');
             // this block will be triggered, if refresh token is expired too
             if(err.response?.status === 401) {
               deleteCookie(authSetup.tokenAccessor);
@@ -131,11 +132,12 @@ export class AxiosInstance implements IAxiosInstance {
       }
       return Promise.reject(error);
     });
+    // return this to call other functions when this function has been implemented and stored in a variable.
+    return this;
   }
-  
 }
 
-export const axiosInstance = new AxiosInstance().create();
+export const axiosInstance = new CustomAxios().create();
 
 // configuration to get upload progress(in percentage)
 

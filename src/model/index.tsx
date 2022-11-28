@@ -1,14 +1,12 @@
 // redux
 export interface AUTH_DATA {
   name: string;
+  user_name: string;
   email: string;
-  token: string;
-  refreshToken: string;
   role: string;
   _id?: string;
   image?: string | null;
 }
-
 export interface AUTH_STATE {
   isInitialized: boolean;
   isAuthenticated: boolean;
@@ -38,6 +36,11 @@ export type SEND_LOGIN_OTP_DETAILS = {
 export type VALIDATE_OTP_DETAILS = {
   email: AUTH_DATA["email"];
   otp: number | string;
+};
+
+export type VALIDATE_OTP_RESPONSE = {
+  token: string;
+  refreshToken: string;
 };
 
 // user-api
