@@ -4,14 +4,16 @@ export const authSetup = {
   twoFactorAuthenticationPage: "/auth/2fa/send_otp/:email",
   homePage: "/",
   tokenAccessor: "token",
-  refreshTokenAccessor: 'refreshToken'
+  refreshTokenAccessor: "refreshToken"
 };
 
 // #rbac-setup
 export const rbacSetup = {
-  roles: ["admin"],
+  roles: ["admin", "app_user"],
   homePage: {
     admin: "/admin",
+    ping_user: "/ping_user",
+    public: "/public"
   },
   publicRoutes: ["/verification"],
   authRoutes: ["/auth", "/auth/login"], // pages that are used for authentication purposes

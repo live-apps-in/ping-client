@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { compressFile, downloadLink, getBase64 } from "src/utils";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";

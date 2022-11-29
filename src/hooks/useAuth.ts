@@ -29,7 +29,7 @@ export const useAuth = () => {
         // initialize the app by fetching details from profile route (initialize function is replaced by profile route)
         const data = await userApi.profile();
         // we don't need to store token and refresh token in the redux. those only should be used from cookies
-        data.role = "admin";
+        data.role = "ping_user";
         if (updateRedux)
           authActions.initialize({ data, isAuthenticated: true });
         resolve(data);
@@ -51,7 +51,7 @@ export const useAuth = () => {
     // we don't need to store token and refresh token in the redux. those only should be used from cookies
     delete authData['token'];
     delete authData['refreshToken'];
-    if (updateRedux) authActions.login({ role: "admin", ...authData });
+    if (updateRedux) authActions.login({ role: "ping_user", ...authData });
     return undefined;
   }
 

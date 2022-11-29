@@ -2,6 +2,7 @@
 export interface AUTH_DATA {
   name: string;
   user_name: string;
+  tag: string;
   email: string;
   role: string;
   _id?: string;
@@ -25,11 +26,11 @@ export interface USE_AUTH_OPTIONS {
 }
 
 export type SEND_OTP_DETAILS = {
-  email: string;
+  email: AUTH_DATA['email'];
 };
 
 export type SEND_LOGIN_OTP_DETAILS = {
-  email: string;
+  email: AUTH_DATA['email'];
 };
 
 //// 2fa
@@ -45,10 +46,10 @@ export type VALIDATE_OTP_RESPONSE = {
 
 // user-api
 export type SIGNUP_USER_DETAILS = {
-  name: string;
+  name: AUTH_DATA['name'];
   email: AUTH_DATA["email"];
-  user_name: string;
-  tag: string;
+  user_name: AUTH_DATA['user_name'];
+  tag: AUTH_DATA['tag'];
 };
 
 // ---------------------------------------------------------------- //

@@ -20,20 +20,28 @@ export const routes: ROUTE_DEFINITION[] = [
       </>
     ),
   },
-  {
-    path: "/",
-    children: [...routeDefinition.auth],
-  },
-  {
-    path: "/",
-    children: [...routeDefinition.admin],
-  },
+  ...routeDefinition.auth,
+  ...routeDefinition.admin,
+  ...routeDefinition.ping_user,
+  ...routeDefinition.public,
+  // the below examples works as well
+  // {
+  //   path: "/",
+  //   children: [...routeDefinition.auth],
+  // },
+  // {
+  //   path: "/",
+  //   children: [...routeDefinition.admin],
+  // },
+  // {
+  //   path: "/ping_user",
+  //   children: [...routeDefinition.app_user]
+  // },
   // for other roles/categories use the below routing format
   // {
   //   path: "/other",
   //   children: [{ path: "/other", element: <div>Other</div> }],
   // },
-  ...routeDefinition.public,
   {
     path: "/404",
     element: (

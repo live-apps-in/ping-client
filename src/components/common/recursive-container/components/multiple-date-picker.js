@@ -1,4 +1,3 @@
-import React from "react";
 import FormHelperText from "@mui/material/FormHelperText";
 import DayPicker, { DateUtils } from "react-day-picker";
 import "react-day-picker/lib/style.css";

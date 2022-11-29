@@ -2,14 +2,15 @@ import { PublicRouteExample } from "src/content/public";
 import { Public } from "src/guard";
 import { ROUTES_DEFINITION } from "src/routes";
 import { Helmet } from "react-helmet";
+import { rbacSetup } from "src/data";
 
 export const publicRoutes: ROUTES_DEFINITION = [
   {
-    path: "/public",
+    path: rbacSetup.homePage.public,
     element: (
       <>
         <Helmet>
-          <title>About Us - Nanban</title>
+          <title>Public Page</title>
         </Helmet>
         <Public>
           <PublicRouteExample />

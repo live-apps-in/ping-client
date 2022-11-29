@@ -1,4 +1,3 @@
-import React from "react";
 import { Radio, FormControlLabel } from "@mui/material";
 
 export const RadioInput = (props) => {

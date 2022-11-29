@@ -1,4 +1,3 @@
-import React from "react";
 import { Checkbox, FormControlLabel } from "@mui/material";
 
 export const CheckboxInput = (props) => {

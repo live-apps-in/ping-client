@@ -1,4 +1,3 @@
-import React from "react";
 import MuiPhoneNumber from "material-ui-phone-number";
 import { PHONE_INPUT_PROPS } from "src/components";
 import { filterNumbers } from "src/utils";
