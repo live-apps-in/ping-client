@@ -4,7 +4,7 @@ import {
   OAuthPageContent,
   SignupPageContent,
 } from "src/content/auth";
-import { authSetup } from "src/data";
+import { authSetup } from "src/config";
 import { Guest } from "src/guard";
 import { AuthLayout } from "src/layouts";
 import { ROUTES_DEFINITION } from "../router";

@@ -1,4 +1,4 @@
-import { rbacSetup } from "src/data";
+import { rbacConfig } from "src/config";
 import { ROUTES_DEFINITION } from "../router";
 import { Helmet } from "react-helmet";
 import { Authenticated } from "src/guard";
@@ -6,7 +6,7 @@ import { PingUserHomeContent } from "src/content/ping-user";
 
 export const pingUserRoutes: ROUTES_DEFINITION = [
     {
-        path: rbacSetup.homePage.ping_user,
+        path: rbacConfig.homePage.ping_user,
         element: (
             <>
                 <Helmet>

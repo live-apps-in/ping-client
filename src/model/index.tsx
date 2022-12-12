@@ -45,12 +45,21 @@ export type VALIDATE_OTP_RESPONSE = {
 };
 
 // user-api
-export type SIGNUP_USER_DETAILS = {
+export type REGISTER_USER_DETAILS = {
   name: AUTH_DATA['name'];
   email: AUTH_DATA["email"];
   user_name: AUTH_DATA['user_name'];
   tag: AUTH_DATA['tag'];
 };
+
+export type SIGNUP_USER_DETAILS = {
+  name: AUTH_DATA["name"];
+  email: AUTH_DATA["email"];
+}
+
+export type SIGNUP_USER_RESPONSE = {
+  token: string;
+}
 
 // ---------------------------------------------------------------- //
 

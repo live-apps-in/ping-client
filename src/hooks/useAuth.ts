@@ -1,9 +1,11 @@
 import { userApi, authApi } from "src/api";
-import { authSetup } from "src/data";
+import { authConfig } from "src/config";
 import {
   AUTH_DATA,
+  REGISTER_USER_DETAILS,
   SEND_LOGIN_OTP_DETAILS,
   SEND_OTP_DETAILS,
+  SIGNUP_USER_DETAILS,
   USE_AUTH_OPTIONS,
   VALIDATE_OTP_DETAILS,
   VALIDATE_OTP_RESPONSE,
@@ -21,9 +23,9 @@ export const useAuth = () => {
   }: USE_AUTH_OPTIONS = {}): Promise<AUTH_DATA> {
     return new Promise(async (resolve, reject) => {
       try {
-        const token = getCookie(authSetup.tokenAccessor);
+        const token = getCookie(authConfig.tokenAccessor);
         if (!token) {
-          deleteCookie(authSetup.refreshTokenAccessor);
+          deleteCookie(authConfig.refreshTokenAccessor);
           throw new Error("Session expired");
         }
         // initialize the app by fetching details from profile route (initialize function is replaced by profile route)
@@ -44,8 +46,8 @@ export const useAuth = () => {
     data: VALIDATE_OTP_RESPONSE,
     { updateRedux = true }: USE_AUTH_OPTIONS = {}
   ) {
-    setCookie(authSetup.tokenAccessor, data.token);
-    setCookie(authSetup.refreshTokenAccessor, data.refreshToken);
+    setCookie(authConfig.tokenAccessor, data.token);
+    setCookie(authConfig.refreshTokenAccessor, data.refreshToken);
     // fetch auth data from profile (similar action while we initialize our app)
     const authData = await userApi.profile();
     // we don't need to store token and refresh token in the redux. those only should be used from cookies
@@ -53,6 +55,26 @@ export const useAuth = () => {
     delete authData['refreshToken'];
     if (updateRedux) authActions.login({ role: "ping_user", ...authData });
     return undefined;
+  }
+
+  function signup(
+    details: REGISTER_USER_DETAILS,
+    // { updateRedux = true }: USE_AUTH_OPTIONS = {}
+  ) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        // signup to live-apps
+        await userApi.signup({ 
+          email: details.email,
+          name: details.name
+        });
+        // register user to live-apps
+        const data = await userApi.register(details);
+        resolve(data);
+      } catch(err) {
+        reject(err)
+      }
+    })
   }
 
   function sendLoginOTP(details: SEND_LOGIN_OTP_DETAILS) {
@@ -94,15 +116,15 @@ export const useAuth = () => {
     return new Promise(async (resolve, reject) => {
       try {
         await authApi.logout();
-        deleteCookie(authSetup.tokenAccessor);
-        deleteCookie(authSetup.refreshTokenAccessor);
+        deleteCookie(authConfig.tokenAccessor);
+        deleteCookie(authConfig.refreshTokenAccessor);
         window.location.reload();
         if (updateRedux) authActions.logout();
         resolve();
       } catch (err) {
         if (updateRedux) authActions.logout();
-        deleteCookie(authSetup.tokenAccessor);
-        deleteCookie(authSetup.refreshTokenAccessor);
+        deleteCookie(authConfig.tokenAccessor);
+        deleteCookie(authConfig.refreshTokenAccessor);
         window.location.reload();
         reject(err);
       }
@@ -115,6 +137,7 @@ export const useAuth = () => {
     sendLoginOTP,
     validateOTP,
     login,
+    signup,
     logout,
     ...auth,
   };

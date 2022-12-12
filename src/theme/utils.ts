@@ -1,5 +1,5 @@
 import * as CSS from "csstype";
-import { projectSetup } from "src/data";
+import { projectConfig } from "src/config";
 import * as CustomThemes from "./variants";
 
 export enum THEME_NAMES {
@@ -13,7 +13,7 @@ const customThemes = {
 export type THEME = keyof typeof customThemes;
 
 export function themeCreator(theme: keyof typeof customThemes) {
-  return customThemes[theme] || customThemes[projectSetup.defaultTheme];
+  return customThemes[theme] || customThemes[projectConfig.defaultTheme];
 }
 
 export const getTheme = () => {

@@ -19,7 +19,7 @@ const StyledLogoWrapper = styled(Link)`
 export const Logo = () => {
   return (
     <StyledLogoWrapper to="/">
-      {/* <img src={AppLogoFullImage} alt={projectSetup.title} /> */}
+      {/* <img src={AppLogoFullImage} alt={projectConfig.title} /> */}
     </StyledLogoWrapper>
   );
 };

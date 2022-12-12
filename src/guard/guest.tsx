@@ -1,4 +1,4 @@
-import { authSetup } from "src/data";
+import { authConfig } from "src/config";
 import { useAuth } from "src/hooks";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ export const Guest = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) navigate(authSetup.homePage, { replace: true });
+    if (isAuthenticated) navigate(authConfig.homePage, { replace: true });
     else setVerified(true);
   }, []);
 

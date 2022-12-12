@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { authSetup, rbacSetup } from "src/data";
+import { authSetup, rbacConfig } from "src/config";
 import { useAuth } from "src/hooks";
 import { useLocation } from "react-router-dom";
 import { getSearchQuery, handleError } from "src/utils";
@@ -42,7 +42,7 @@ export const OAuthPageContent = () => {
     try {
       const data = await authenticate();
       navigate(
-        backToURL || rbacSetup.homePage[data.role] || authSetup.homePage
+        backToURL || rbacConfig.homePage[data.role] || authSetup.homePage
       );
       window.modal({
         type: "custom",

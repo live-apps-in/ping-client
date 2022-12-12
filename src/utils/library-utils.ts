@@ -8,7 +8,7 @@ import uniqId from "uniqid";
 import { isValidPhoneNumber } from "react-phone-number-input";
 
 // other
-import { projectSetup } from "src/data";
+import { projectConfig } from "src/config";
 
 // yup
 // https://github.com/jquense/yup/issues/312#issuecomment-745034006 --reference
@@ -55,7 +55,7 @@ yup.addMethod(yup.string, "phone", function () {
     (value === 0 ? "0" : value)?.toString()
       ? isValidPhoneNumber(
           value.toString(),
-          projectSetup.defaultPhonenumberCountry
+          projectConfig.defaultPhonenumberCountry
         )
       : true
   );

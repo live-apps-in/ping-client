@@ -1,9 +1,9 @@
-import { axiosInstance } from "src/utils";
+import { gateway } from "src/api";
 
 export const imageUrlToBase64 = async (url) => {
   try {
     if (url && url.startsWith("http")) {
-      let image = await axiosInstance.post("/services/image_to_base64", {
+      let image = await gateway.post("/services/image_to_base64", {
         url,
       });
       const { raw } = image.data;
@@ -16,7 +16,7 @@ export const imageUrlToBase64 = async (url) => {
 // export const imageUrlToBase64 = async (url) => {
 //   try {
 //     if (url && url.startsWith('http')) {
-//       const { data } = await axiosInstance.get(url, {
+//       const { data } = await gateway.get(url, {
 //         responseType: 'arraybuffer'
 //       });
 //       console.log(raw);

@@ -1,5 +1,5 @@
 import { adminRoutes } from "./admin";
-import { pingUserRoutes } from "./app_user";
+import { pingUserRoutes } from "./ping_user";
 import { authRoutes } from "./auth";
 import { publicRoutes } from "./public";
 

@@ -1,13 +1,13 @@
-import { authSetup } from "src/data";
+import { authConfig } from "src/config";
 import { useAuth } from "src/hooks";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { rbacSetup } from "src/data";
+import { rbacConfig } from "src/config";
 
 // this guard will redirect the page if the user is not authenticated
 export const Authenticated: React.FunctionComponent<{
   // #rbac-setup
-  roles?: typeof rbacSetup.roles;
+  roles?: typeof rbacConfig.roles;
   children: React.ReactNode;
 }> = ({ roles, children }) => {
   const [verified, setVerified] = useState(false);
@@ -17,7 +17,7 @@ export const Authenticated: React.FunctionComponent<{
 
   useEffect(() => {
     if (!isAuthenticated || !data) {
-      const url = `${authSetup.authPage}?backToURL=${pathname}`;
+      const url = `${authConfig.authPage}?backToURL=${pathname}`;
       navigate(url);
     } else {
       // if the user's role doesn't match, then redirect user to 404 page

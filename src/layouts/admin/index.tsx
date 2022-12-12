@@ -5,7 +5,7 @@ import { CustomButton } from "src/components";
 import { layoutSettings } from "./layout-settings";
 import { useAuth } from "src/hooks";
 import { useState } from "react";
-import { authSetup } from "src/data";
+import { authConfig } from "src/config";
 import { isActiveRoute } from "src/utils";
 import { useLocation } from "react-router-dom";
 
@@ -36,7 +36,7 @@ export const AdminLayout: React.FC<{ children?: React.ReactNode }> = ({
 
   const actions =
     // display only if its not the signup page
-    !isActiveRoute({ path: pathname, route: authSetup.signupPage }) && (
+    !isActiveRoute({ path: pathname, route: authConfig.signupPage }) && (
       <CustomButton loading={loading} onClick={handleLogout}>
         Logout
       </CustomButton>

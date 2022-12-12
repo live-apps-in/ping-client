@@ -1,5 +1,5 @@
 import { LoginPageContent, EnterOTP } from "src/content/auth";
-import { authSetup } from "src/data";
+import { authConfig } from "src/config";
 import { Guest } from "src/guard";
 import { ROUTES_DEFINITION } from "../router";
 import { Helmet } from "react-helmet";
@@ -8,7 +8,7 @@ import { SignupPageContent } from "src/content/auth";
 
 export const authRoutes: ROUTES_DEFINITION = [
   {
-    path: authSetup.authPage,
+    path: authConfig.authPage,
     element: (
       <>
         <Helmet>
@@ -23,7 +23,7 @@ export const authRoutes: ROUTES_DEFINITION = [
     ),
   },
   {
-    path: authSetup.signupPage,
+    path: authConfig.signupPage,
     element: (
       <>
         <Helmet>
@@ -38,7 +38,7 @@ export const authRoutes: ROUTES_DEFINITION = [
     ),
   },
   {
-    path: authSetup.twoFactorAuthenticationPage,
+    path: authConfig.twoFactorAuthenticationPage,
     element: (
       <>
         <Helmet>

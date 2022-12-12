@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppLoader } from "src/components";
-import { rbacSetup } from "src/data";
+import { rbacConfig } from "src/config";
 import { useAuth } from "src/hooks";
 
 export const HomePageContent = () => {
@@ -11,7 +11,7 @@ export const HomePageContent = () => {
   useEffect(() => {
     if (data) {
       navigate(
-        `${rbacSetup.homePage[data?.role as keyof typeof rbacSetup.homePage]}`,
+        `${rbacConfig.homePage[data?.role as keyof typeof rbacConfig.homePage]}`,
         { replace: true }
       );
     }

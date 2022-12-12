@@ -9,15 +9,17 @@ import {
   CustomText,
   RecursiveContainer,
 } from "src/components";
-import { SIGNUP_USER_DETAILS } from "src/model";
+import { REGISTER_USER_DETAILS } from "src/model";
 import { handleError } from "src/utils";
 import { loginSchema } from "src/schema";
+import { useAuth } from "src/hooks";
 
 export const SignupPageContent = () => {
   const navigate = useNavigate();
+  const { signup } = useAuth()
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = async (data: SIGNUP_USER_DETAILS) => {
+  const handleSubmit = async (data: REGISTER_USER_DETAILS) => {
     setSubmitting(true);
     const updatedData = {
       ...data,
@@ -25,7 +27,7 @@ export const SignupPageContent = () => {
     };
     delete updatedData.tag;
     try {
-      await userApi.signup(updatedData);
+      await signup(data);
       navigate(`/auth/2fa/send_otp/${updatedData.email}`);
     } catch (err) {
       handleError(err);

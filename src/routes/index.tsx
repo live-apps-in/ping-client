@@ -35,7 +35,7 @@ export const routes: ROUTE_DEFINITION[] = [
   // },
   // {
   //   path: "/ping_user",
-  //   children: [...routeDefinition.app_user]
+  //   children: [...routeDefinition.ping_user]
   // },
   // for other roles/categories use the below routing format
   // {

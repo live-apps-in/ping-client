@@ -2,7 +2,7 @@ import { AppLogoFullImage } from "src/assets";
 import { mediaQuery } from "src/theme";
 import { Link, LinkProps } from "react-router-dom";
 import { styled } from "@mui/material";
-import { projectSetup } from "src/data";
+import { projectConfig } from "src/config";
 
 const StyledLogoWrapper = styled(Link)`
   img {
@@ -24,7 +24,7 @@ interface LINK_PROPS extends Omit<LinkProps, "to"> {
 export const Logo: React.FC<LINK_PROPS> = (props) => {
   return (
     <StyledLogoWrapper to="/" {...props}>
-      <img src={AppLogoFullImage} alt={projectSetup.title} />
+      <img src={AppLogoFullImage} alt={projectConfig.title} />
     </StyledLogoWrapper>
   );
 };

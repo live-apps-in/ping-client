@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { authApi, socialAuth, userApi } from "src/api";
-import { authSetup, AUTH_PROVIDER } from "src/data";
+import { authSetup, AUTH_PROVIDER } from "src/config";
 import { useActions, useSelector } from "src/hooks";
 import {
   USE_AUTH_OPTIONS,
