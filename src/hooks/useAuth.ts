@@ -72,9 +72,9 @@ export const useAuth = () => {
         const data = await userApi.register(details);
         resolve(data);
       } catch(err) {
-        reject(err)
+        reject(err);
       }
-    })
+    });
   }
 
   function sendLoginOTP(details: SEND_LOGIN_OTP_DETAILS) {

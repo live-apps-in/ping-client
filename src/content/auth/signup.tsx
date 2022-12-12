@@ -16,7 +16,7 @@ import { useAuth } from "src/hooks";
 
 export const SignupPageContent = () => {
   const navigate = useNavigate();
-  const { signup } = useAuth()
+  const { signup } = useAuth();
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (data: REGISTER_USER_DETAILS) => {
