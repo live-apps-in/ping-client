@@ -3,7 +3,7 @@
 import { yup } from "src/utils";
 
 export const loginSchema = yup.object().shape({
-  email: yup.string().required("Email is required"),
+  email: yup.string().email('Invalid Email').required("Email is required"),
 });
 
 export const signUpSchema = yup.object().shape({
@@ -15,3 +15,6 @@ export const signUpSchema = yup.object().shape({
   tag: yup.number().length(4, "Should be exactly 4 digits"),
   email: yup.string().email("Invalid Email").required("Email is required"),
 });
+
+
+export * from './live-apps-accounts-portal-schema';
