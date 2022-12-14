@@ -5,6 +5,7 @@ import { ROUTES_DEFINITION } from "../router";
 import { Helmet } from "react-helmet";
 import { AuthLayout } from "src/layouts";
 import { SignupPageContent } from "src/content/auth";
+import { OTPPortal, LoginPortalContent, SignupPortalContent } from "src/content/auth/live-apps-accounts-portal";
 
 export const authRoutes: ROUTES_DEFINITION = [
   {
@@ -52,4 +53,43 @@ export const authRoutes: ROUTES_DEFINITION = [
       </>
     ),
   },
+  {
+    path: authConfig.liveAppsLoginPage,
+    element: (
+      <>
+        <Helmet>
+          <title>Liveapps Login Page</title>
+        </Helmet>
+        <Guest>
+          <LoginPortalContent />
+        </Guest>
+      </>
+    )
+  },
+  {
+    path: authConfig.liveAppsSignupPage,
+    element: (
+      <>
+        <Helmet>
+          <title>Liveapps Signup Page</title>
+        </Helmet>
+        <Guest>
+          <SignupPortalContent />
+        </Guest>
+      </>
+    )
+  },
+  {
+    path: authConfig.liveAppsTwoFactorAuthenticationPage,
+    element: (
+      <>
+        <Helmet>
+          <title>Liveapps - 2FA</title>
+        </Helmet>
+        <Guest>
+          <OTPPortal />
+        </Guest>
+      </>
+    )
+  }
 ];

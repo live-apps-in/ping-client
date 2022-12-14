@@ -1,6 +1,9 @@
 export const authConfig = {
     authPage: "/auth/login", // exact page where the user will be redirected if not loggedin
     signupPage: "/auth/signup",
+    liveAppsLoginPage: '/liveapps/auth/login',
+    liveAppsSignupPage: '/liveapps/auth/signup',
+    liveAppsTwoFactorAuthenticationPage: '/liveapps/auth/2fa/send_otp/:email',
     twoFactorAuthenticationPage: "/auth/2fa/send_otp/:email",
     homePage: "/",
     tokenAccessor: "token",

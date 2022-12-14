@@ -61,6 +61,24 @@ export type SIGNUP_USER_RESPONSE = {
   token: string;
 }
 
+// live apps auth
+//.. login
+export type LIVE_APPS_LOGIN_DETAILS = {
+  email: string;
+}
+
+//.. signup
+export type LIVE_APPS_SIGNUP_DETAILS = {
+  name: string;
+  email: string;
+}
+
+//.. validate OTP details
+export type LIVE_APPS_VALIDATE_OTP_DETAILS = {
+  email: string;
+  otp: string;
+}
+
 // ---------------------------------------------------------------- //
 
 export * from "./custom-models";
