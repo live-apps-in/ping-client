@@ -1,19 +1,19 @@
 import { useFormik } from 'formik';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CONFIG_TYPE, CustomButton, CustomCard, CustomText, RecursiveContainer } from "src/components";
 import { authConfig } from 'src/config';
 import { useLiveAppsAuth } from 'src/hooks';
-import { liveAppsAccountsPortalSignupSchema } from 'src/schema';
-import { getSearchQuery, getSearchString, handleError } from 'src/utils';
+import { liveAppsAccountsPortalSigninSchema } from 'src/schema';
+import { getSearchQuery, handleError } from 'src/utils';
 
-export const SignupPortalContent: React.FC = () => {
+export const LoginPortalContent: React.FC = () => {
 
     const [submitting, setSubmitting] = useState(false);
     const { search } = useLocation();
-    const navigate = useNavigate();
     const searchQuery = getSearchQuery(search);
-    const { signup } = useLiveAppsAuth();
+    const navigate = useNavigate();
+    const { login } = useLiveAppsAuth();
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -25,12 +25,9 @@ export const SignupPortalContent: React.FC = () => {
     const handleSubmit = async (details) => {
         setSubmitting(true);
         try {
-            const data = await signup(details);
+            const data = await login(details);
             window.flash({ message: 'OTP sent successfully' });
-            // TODO: find a way to redirect to signup page to ping
-            const navigateUrl = `${authConfig.liveAppsTwoFactorAuthenticationPage.replace(':email', details.email)}${search}&${
-                getSearchString({ signup: true })
-            }`;
+            const navigateUrl = `${authConfig.liveAppsTwoFactorAuthenticationPage.replace(':email', details.email)}${search}`;
             navigate(navigateUrl);
             console.log(data);
         } catch(err) {
@@ -41,37 +38,28 @@ export const SignupPortalContent: React.FC = () => {
 
     const formik = useFormik({
         initialValues: {
-            name: '',
             email: ''
         },
         onSubmit: handleSubmit,
-        validationSchema: liveAppsAccountsPortalSignupSchema
+        validationSchema: liveAppsAccountsPortalSigninSchema
     });
 
     const config: CONFIG_TYPE = [
         {
-            name: 'name',
-            label: 'Name'
-        },
-        {
             name: 'email',
             type: 'email',
-            label: 'Live Apps Email'
+            label: 'Live-apps Email'
         }
     ];
 
     return (
-        <CustomCard>
+        <CustomCard headerProps={{ title: 'Signin With Live Apps email' }}>
             {error ? 
                 <CustomText variant='h3'>{error}</CustomText> 
                 : <form onSubmit={formik.handleSubmit}>
-                    <RecursiveContainer 
-                        config={config} 
-                        validationSchema={liveAppsAccountsPortalSignupSchema} 
-                        formik={formik} 
-                    />
-                    <CustomButton loading={submitting} type='submit'>Signup with Live Apps</CustomButton>
-                    <CustomButton href={`${authConfig.liveAppsLoginPage}${search}`}>Login with Live apps</CustomButton>
+                    <RecursiveContainer config={config} formik={formik} validationSchema={liveAppsAccountsPortalSigninSchema} />
+                    <CustomButton type='submit' loading={submitting}>Signin with Live apps</CustomButton>
+                    <CustomButton href={`${authConfig.liveAppsSignupPage}${search}`}>Signup with Live apps</CustomButton>
                 </form>
             }
         </CustomCard>

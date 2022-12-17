@@ -1,9 +1,5 @@
-import { platformConfig } from "src/config";
 import {
-  SEND_LOGIN_OTP_DETAILS,
-  SEND_OTP_DETAILS,
-  VALIDATE_OTP_DETAILS,
-  VALIDATE_OTP_RESPONSE,
+  LOGIN_USER_DETAILS,
 } from "src/model";
 import { createApiFunction } from "src/utils";
 import { authGateway, Gateway } from "./gateway";
@@ -12,20 +8,7 @@ class AuthApi {
   logout(): Promise<void> {
     return createApiFunction(() => authGateway.get("/auth/logout"));
   }
-  sendLoginOTP(details: SEND_LOGIN_OTP_DETAILS) {
-    return createApiFunction(() => authGateway.post("/auth/accounts", { ...details, platform: platformConfig.accounts }));
-  }
-  sendOTP(details: SEND_OTP_DETAILS) {
-    return createApiFunction(() =>
-      authGateway.get(`/auth/2fa/send_otp/${details.email}`)
-    );
-  }
-  validateOTP(details: VALIDATE_OTP_DETAILS): Promise<VALIDATE_OTP_RESPONSE> {
-    return createApiFunction(() =>
-      authGateway.post("/auth/accounts/2fa/otp/validate", details)
-    );
-  }
-  getAccessTokenFromRefreshToken(refreshToken: VALIDATE_OTP_RESPONSE['refreshToken']): Promise<{ accessToken: VALIDATE_OTP_RESPONSE['token'] }> {
+  getAccessTokenFromRefreshToken(refreshToken: LOGIN_USER_DETAILS['refreshToken']): Promise<{ accessToken: LOGIN_USER_DETAILS['token'] }> {
     const customGateway = 
       new Gateway({ setupCustomizations: false })
         .setupHeadersForRequestInterceptors({ "x-refresh-token": refreshToken })

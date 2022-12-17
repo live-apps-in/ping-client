@@ -1,81 +1,46 @@
-import { userApi, authApi } from "src/api";
-import { authConfig } from "src/config";
 import {
-  AUTH_DATA,
   LIVE_APPS_LOGIN_DETAILS,
-  REGISTER_USER_DETAILS,
-  SEND_LOGIN_OTP_DETAILS,
-  SEND_OTP_DETAILS,
-  USE_AUTH_OPTIONS,
-  VALIDATE_OTP_DETAILS,
-  VALIDATE_OTP_RESPONSE,
+  LIVE_APPS_SIGNUP_DETAILS,
+  LIVE_APPS_VALIDATE_OTP_DETAILS,
+  LIVE_APPS_VALIDATE_OTP_RESPONSE,
 } from "src/model";
-import { useSelector } from "src/redux";
-import { deleteCookie, getCookie, setCookie } from "src/utils";
-import { useActions } from "src/hooks";
+import { liveAppsAuthApi } from "src/api/live-apps-auth";
 
 // nothing is stored in redux/cookie, every details should be used locally and sent through query params using the redirect url
 // in future this logic will be moved to a separate 
 export const useLiveAppsAuth = () => {
 
   async function login(
-    data: LIVE_APPS_LOGIN_DETAILS,
-  ) {
+    details: LIVE_APPS_LOGIN_DETAILS,
+  ): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
-        // await 
+        await liveAppsAuthApi.signinWithLiveApps(details);
+        resolve(undefined);
       } catch(err) {
-
+        reject(err);
       }
-    })
+    });
   }
 
   function signup(
-    details: REGISTER_USER_DETAILS,
-    // { updateRedux = true }: USE_AUTH_OPTIONS = {}
-  ) {
+    details: LIVE_APPS_SIGNUP_DETAILS,
+  ): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
         // signup to live-apps
-        await userApi.signup({ 
-          email: details.email,
-          name: details.name
-        });
-        // register user to live-apps
-        const data = await userApi.register(details);
-        resolve(data);
+        await liveAppsAuthApi.signupWithLiveApps(details);
+        resolve(undefined);
       } catch(err) {
         reject(err);
       }
     });
   }
 
-  function sendLoginOTP(details: SEND_LOGIN_OTP_DETAILS) {
+  function validateOTP(details: LIVE_APPS_VALIDATE_OTP_DETAILS): Promise<LIVE_APPS_VALIDATE_OTP_RESPONSE> {
     return new Promise(async (resolve, reject) => {
       try {
-        await authApi.sendLoginOTP(details);
-        resolve(undefined);
-      } catch (err) {
-        reject(err);
-      }
-    });
-  }
-
-  function sendOTP(details: SEND_OTP_DETAILS) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        await authApi.sendOTP(details);
-        resolve(undefined);
-      } catch (err) {
-        reject(err);
-      }
-    });
-  }
-
-  function validateOTP(details: VALIDATE_OTP_DETAILS): Promise<VALIDATE_OTP_RESPONSE> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const data = await authApi.validateOTP(details);
+        const data = await liveAppsAuthApi.validateOTP(details);
         resolve(data);
       } catch (err) {
         reject(err);
@@ -105,11 +70,9 @@ export const useLiveAppsAuth = () => {
   // }
 
   const authUtils = {
-    sendOTP,
-    sendLoginOTP,
-    validateOTP,
     login,
     signup,
+    validateOTP,
     // logout,
   };
   return authUtils;

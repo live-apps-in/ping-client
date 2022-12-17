@@ -3,11 +3,8 @@ import { authConfig } from "src/config";
 import {
   AUTH_DATA,
   REGISTER_USER_DETAILS,
-  SEND_LOGIN_OTP_DETAILS,
-  SEND_OTP_DETAILS,
   USE_AUTH_OPTIONS,
-  VALIDATE_OTP_DETAILS,
-  VALIDATE_OTP_RESPONSE,
+  LOGIN_USER_DETAILS,
 } from "src/model";
 import { useSelector } from "src/redux";
 import { deleteCookie, getCookie, setCookie } from "src/utils";
@@ -42,9 +39,9 @@ export const useAuth = () => {
   }
 
   async function login(
-    data: VALIDATE_OTP_RESPONSE,
+    data: LOGIN_USER_DETAILS,
     { updateRedux = true }: USE_AUTH_OPTIONS = {}
-  ) {
+  ): Promise<AUTH_DATA> {
     setCookie(authConfig.tokenAccessor, data.token);
     setCookie(authConfig.refreshTokenAccessor, data.refreshToken);
     // fetch auth data from profile (similar action while we initialize our app)
@@ -52,58 +49,21 @@ export const useAuth = () => {
     // we don't need to store token and refresh token in the redux. those only should be used from cookies
     delete authData['token'];
     delete authData['refreshToken'];
-    if (updateRedux) authActions.login({ role: "ping_user", ...authData });
-    return undefined;
+    const loginDetails = { role: "ping_user", ...authData };
+    if (updateRedux) authActions.login(loginDetails);
+    return loginDetails;
   }
 
-  function signup(
+  function register(
     details: REGISTER_USER_DETAILS,
     // { updateRedux = true }: USE_AUTH_OPTIONS = {}
   ) {
     return new Promise(async (resolve, reject) => {
       try {
-        // signup to live-apps
-        await userApi.signup({ 
-          email: details.email,
-          name: details.name
-        });
         // register user to live-apps
-        const data = await userApi.register(details);
+        const data = await userApi.registerUserWithLiveApps(details);
         resolve(data);
       } catch(err) {
-        reject(err);
-      }
-    });
-  }
-
-  function sendLoginOTP(details: SEND_LOGIN_OTP_DETAILS) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        await authApi.sendLoginOTP(details);
-        resolve(undefined);
-      } catch (err) {
-        reject(err);
-      }
-    });
-  }
-
-  function sendOTP(details: SEND_OTP_DETAILS) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        await authApi.sendOTP(details);
-        resolve(undefined);
-      } catch (err) {
-        reject(err);
-      }
-    });
-  }
-
-  function validateOTP(details: VALIDATE_OTP_DETAILS): Promise<VALIDATE_OTP_RESPONSE> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const data = await authApi.validateOTP(details);
-        resolve(data);
-      } catch (err) {
         reject(err);
       }
     });
@@ -132,11 +92,8 @@ export const useAuth = () => {
 
   const authUtils = {
     initialize,
-    sendOTP,
-    sendLoginOTP,
-    validateOTP,
     login,
-    signup,
+    register,
     logout,
     ...auth,
   };

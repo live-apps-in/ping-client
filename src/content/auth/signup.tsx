@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
-import { userApi } from "src/api/user";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   CONFIG_TYPE,
   CustomButton,
@@ -10,14 +9,27 @@ import {
   RecursiveContainer,
 } from "src/components";
 import { REGISTER_USER_DETAILS } from "src/model";
-import { handleError } from "src/utils";
+import { getSearchQuery, getSearchString, handleError } from "src/utils";
 import { loginSchema } from "src/schema";
 import { useAuth } from "src/hooks";
+import { authConfig } from "src/config";
 
+// TODO: rename this and affecting places to register 
 export const SignupPageContent = () => {
   const navigate = useNavigate();
-  const { signup } = useAuth();
+  const { register, login } = useAuth();
+  const { search } = useLocation();
+  const searchQuery: any = getSearchQuery(search);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+      // if refreshToken and token are not obtained from liveApps portal redirect to the portal to obtain them
+    if(searchQuery?.token && searchQuery?.refreshToken) {
+      redirectToLiveAppsSignup();
+    }
+  }, [search]);
+
+  const redirectToLiveAppsSignup = () => navigate(`${authConfig.liveAppsLoginPage}?${getSearchString({ redirectUrl: authConfig.authPage })}`);
 
   const handleSubmit = async (data: REGISTER_USER_DETAILS) => {
     setSubmitting(true);
@@ -27,8 +39,10 @@ export const SignupPageContent = () => {
     };
     delete updatedData.tag;
     try {
-      await signup(data);
-      navigate(`/auth/2fa/send_otp/${updatedData.email}`);
+      // register user with provided details
+      await register(data);
+      // once registration is complete, login the user with the refreshToken and token obtained from liveapps portal
+      await login({ token: searchQuery.token, refreshToken: searchQuery.refreshToken });
     } catch (err) {
       handleError(err);
     }
