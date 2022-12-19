@@ -3,7 +3,7 @@ import { styled } from "@mui/material";
 import { CustomButton, CustomCard, CustomText } from "src/components";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { getSearchQuery, getSearchString, handleError } from "src/utils";
+import { appendSearchString, getSearchQuery, handleError } from "src/utils";
 import { useLiveAppsAuth } from "src/hooks";
 import { authConfig } from "src/config";
 
@@ -26,7 +26,7 @@ export const OTPPortal = () => {
   const [submitting, setSubmitting] = useState(false);
   const [resending, setResending] = useState(false);
   const { search } = useLocation();
-  const searchQuery = getSearchQuery(search);
+  const searchQuery: any = getSearchQuery(search);
   const { email = "" } = useParams();
   const navigate = useNavigate();
   const { validateOTP, login } = useLiveAppsAuth();
@@ -35,25 +35,22 @@ export const OTPPortal = () => {
 
   useEffect(() => {
       if(!searchQuery?.redirectUrl) {
-          setError('Redirect Url is required in search query');
+        setError('Redirect Url is required in search query');
       }
-  }, [searchQuery]);
+    }, [searchQuery]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitting(true);
     try {
       const data = await validateOTP({ email, otp });
-      console.log(data[authConfig.tokenAccessor], getSearchString({ 
+      const [redirectUrl = '', redirectUrlSearch = ''] = searchQuery.redirectUrl?.split('?') || [];
+      // include return data with the previously present search query in the redirect url
+      const navigateUrl = `${redirectUrl}?${appendSearchString([{ 
         token: data[authConfig.tokenAccessor],
-        refreshToken: data[authConfig.refreshTokenAccessor]
-      }));
-      // TODO: find a way to redirect to signup page to live
-      const navigateUrl = `${searchQuery.redirectUrl}?${getSearchString({ 
-        token: data[authConfig.tokenAccessor],
-        refreshToken: data[authConfig.refreshTokenAccessor]
-      })}`;
-      console.log(navigateUrl);
+        refreshToken: data[authConfig.refreshTokenAccessor],
+        signup: searchQuery.signup
+      }, redirectUrlSearch])}`;
       navigate(navigateUrl);
     } catch (err) {
       handleError(err);

@@ -1,4 +1,7 @@
 import axios, { AxiosError } from "axios";
+import { authConfig } from "src/config";
+import { API_HEADER_AUTH_DETAILS } from "src/model";
+import { deleteCookie, getCookie, setCookie } from "./cookie-utils";
 
 export const getError = (errorObject: Error | AxiosError) => {
   if (axios.isAxiosError(errorObject)) {
@@ -58,6 +61,38 @@ export async function createApiFunction(
     return response.data;
   } catch (err) {
     if (errorCallback) return errorCallback(err);
+    throw err;
+  }
+}
+
+// have a temporary authentication until the detail is fetched from api, then revert back to the original
+export async function safeApiCall(
+  apiCall: Function,
+  details?: API_HEADER_AUTH_DETAILS
+) {
+  // if the details are provided, take a backup of existing auth details from cookies and replece them with
+  // the new details provided
+  const existingToken = getCookie(authConfig.tokenAccessor);
+  const existingRefreshToken = getCookie(authConfig.refreshTokenAccessor);
+  if(details && details[authConfig.tokenAccessor] && details[authConfig.refreshTokenAccessor]) {
+    setCookie(authConfig.tokenAccessor, details[authConfig.tokenAccessor]);
+    setCookie(authConfig.refreshTokenAccessor, details[authConfig.refreshTokenAccessor]);
+  }
+  try {
+    const response = await apiCall();
+    // revert the changes in cookies
+    if(existingToken) setCookie(authConfig.tokenAccessor, existingToken);
+    else deleteCookie(authConfig.tokenAccessor);
+    if(existingRefreshToken) setCookie(authConfig.refreshTokenAccessor, existingRefreshToken);
+    else deleteCookie(authConfig.refreshTokenAccessor);
+    return response;
+  }
+  catch(err) {
+    // revert the changes in cookies
+    if(existingToken) setCookie(authConfig.tokenAccessor, existingToken);
+    else deleteCookie(authConfig.tokenAccessor);
+    if(existingRefreshToken) setCookie(authConfig.refreshTokenAccessor, existingRefreshToken);
+    else deleteCookie(authConfig.refreshTokenAccessor);
     throw err;
   }
 }

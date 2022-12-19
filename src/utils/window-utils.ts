@@ -18,7 +18,7 @@ export const createDiv = async (id: string) => {
     await document.getElementsByTagName('body')[0].appendChild(div);
     return div;
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return null;
   }
 };
@@ -27,6 +27,6 @@ export const removeDiv = (element: HTMLDivElement) => {
   try {
     element.parentNode.removeChild(element);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 };

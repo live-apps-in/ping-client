@@ -98,6 +98,30 @@ export const getSearchQueryFromUrl = (
   return searchObject;
 };
 
+export const appendSearchString = (
+  searches: (string | object)[],
+  options?: { returnAs?: 'string' | 'query', prefixQuestionMark?: boolean }
+): string | object => {
+  const { returnAs = 'string', prefixQuestionMark = false } = options || {};
+  let searchObject: object = {};
+  searches.forEach(search => {
+    if(search) {
+      if(typeof search === 'string') {
+        searchObject = {
+          ...searchObject,
+          ...getSearchQuery(search)
+        };
+      } else {
+        searchObject = {
+          ...searchObject,
+          ...search
+        };
+      }
+    }
+  });
+  return returnAs === 'string' ? `${prefixQuestionMark ? '?' : ''}${getSearchString(searchObject)}` : searchObject;
+};
+
 export const getCompleteUrl = (route: string) => {
   const baseurl = removeSlashAtLast(window.location.origin);
   if (route) {

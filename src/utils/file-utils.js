@@ -74,8 +74,10 @@ export async function getBase64(file) {
       // console.log(reader.result);
       resolve(reader.result);
     };
-    reader.onerror = function (error) {
-      console.log("Error: ", error);
+    reader.onerror = function (
+      // error
+    ) {
+      // console.log("Error: ", error);
       resolve(null);
     };
   });

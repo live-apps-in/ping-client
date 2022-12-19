@@ -26,18 +26,28 @@ export const LoginPageContent = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    handlePrimaryActions();
+  }, [searchQuery]);
+
+  const handlePrimaryActions = () => {
     if(searchQuery?.token && searchQuery?.refreshToken) {
+      // if you have the signup flag, redirect to signup page
+      if(searchQuery?.signup) {
+        // include the current search string to the url, to reuse it every where
+        navigate(`${authConfig.signupPage}${search}`);
+        return;
+      }
       handleLogin();
     }
-  }, [search]);
+  };
 
   const handleLogin = async() => {
     const { token, refreshToken } = searchQuery;
     setLoading(true);
     try {
       const data = await login({ token, refreshToken });
-      // TODO: make use of backToUrl here
-      navigate(`/${data.role}`);
+      // TODO: make use of backtoURL here
+      navigate(`/${searchQuery.backtoURL || data.role}`);
     } catch(err) {
       handleError(err);
     }
@@ -48,7 +58,13 @@ export const LoginPageContent = () => {
     <StyledLoginPageContainer>
       <Logo />
       <CustomCard headerProps={{ title: "Login" }}>
-        <CustomButton href={`${authConfig.liveAppsLoginPage}?${getSearchString({ redirectUrl: authConfig.authPage })}`}>Continue with Live apps</CustomButton>
+        <CustomButton href={`${authConfig.liveAppsLoginPage}?${getSearchString({ 
+          // include the current search string to the redirect url, to reuse it every where
+          // liveapps portal will giveback the search string we pass to the redirecturl
+            redirectUrl: `${authConfig.authPage}${search}` 
+          })}`}>
+          Continue with Live apps
+        </CustomButton>
       </CustomCard>
     </StyledLoginPageContainer>
   );

@@ -5,7 +5,7 @@ import { CONFIG_TYPE, CustomButton, CustomCard, CustomText, RecursiveContainer }
 import { authConfig } from 'src/config';
 import { useLiveAppsAuth } from 'src/hooks';
 import { liveAppsAccountsPortalSignupSchema } from 'src/schema';
-import { getSearchQuery, getSearchString, handleError } from 'src/utils';
+import { appendSearchString, getSearchQuery, handleError } from 'src/utils';
 
 export const SignupPortalContent: React.FC = () => {
 
@@ -25,14 +25,10 @@ export const SignupPortalContent: React.FC = () => {
     const handleSubmit = async (details) => {
         setSubmitting(true);
         try {
-            const data = await signup(details);
+            await signup(details);
             window.flash({ message: 'OTP sent successfully' });
-            // TODO: find a way to redirect to signup page to ping
-            const navigateUrl = `${authConfig.liveAppsTwoFactorAuthenticationPage.replace(':email', details.email)}${search}&${
-                getSearchString({ signup: true })
-            }`;
+            const navigateUrl = `${authConfig.liveAppsTwoFactorAuthenticationPage.replace(':email', details.email)}${search}`;
             navigate(navigateUrl);
-            console.log(data);
         } catch(err) {
             handleError(err);
         }
@@ -71,7 +67,9 @@ export const SignupPortalContent: React.FC = () => {
                         formik={formik} 
                     />
                     <CustomButton loading={submitting} type='submit'>Signup with Live Apps</CustomButton>
-                    <CustomButton href={`${authConfig.liveAppsLoginPage}${search}`}>Login with Live apps</CustomButton>
+                    <CustomButton href={`${authConfig.liveAppsLoginPage}?${appendSearchString([
+                        search, { signup: false }
+                    ])}`}>Login with Live apps</CustomButton>
                 </form>
             }
         </CustomCard>

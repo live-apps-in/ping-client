@@ -4,7 +4,7 @@ import {
   AUTH_DATA,
   REGISTER_USER_DETAILS,
   USE_AUTH_OPTIONS,
-  LOGIN_USER_DETAILS,
+  API_HEADER_AUTH_DETAILS,
 } from "src/model";
 import { useSelector } from "src/redux";
 import { deleteCookie, getCookie, setCookie } from "src/utils";
@@ -39,7 +39,7 @@ export const useAuth = () => {
   }
 
   async function login(
-    data: LOGIN_USER_DETAILS,
+    data: API_HEADER_AUTH_DETAILS,
     { updateRedux = true }: USE_AUTH_OPTIONS = {}
   ): Promise<AUTH_DATA> {
     setCookie(authConfig.tokenAccessor, data.token);

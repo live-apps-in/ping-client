@@ -1,15 +1,28 @@
-import { AUTH_DATA, REGISTER_USER_DETAILS } from "src/model";
-import { createApiFunction } from "src/utils";
-import { authGateway, gateway } from "src/api";
-import { platformConfig } from "src/config";
+import { AUTH_DATA, API_HEADER_AUTH_DETAILS, REGISTER_USER_DETAILS } from "src/model";
+import { createApiFunction, safeApiCall } from "src/utils";
+import { authGateway } from "src/api";
+import { authConfig, platformConfig } from "src/config";
 
 class UserApi {
   // live-apps register user
   registerUserWithLiveApps(details: REGISTER_USER_DETAILS): Promise<AUTH_DATA> {
-    return createApiFunction(() => authGateway.post(`/accounts/apps/register/${platformConfig.ping}`, details));
+    return createApiFunction(async() => {
+      const safeApiCallDetails = {
+        [authConfig.tokenAccessor]: details[authConfig.tokenAccessor],
+        [authConfig.refreshTokenAccessor]: details[authConfig.refreshTokenAccessor]
+      } as API_HEADER_AUTH_DETAILS;
+      delete details.token;
+      delete details.refreshToken;
+      return await safeApiCall(
+        () => authGateway.post(`/accounts/apps/register/${platformConfig.ping}`, details), 
+        safeApiCallDetails
+      );
+    });
   }
-  profile(): Promise<AUTH_DATA> {
-    return createApiFunction(() => authGateway.get("/accounts/profile"));
+  profile(details?: API_HEADER_AUTH_DETAILS): Promise<AUTH_DATA> {
+    return createApiFunction(async() => {
+      return await safeApiCall(() => authGateway.get("/accounts/profile"), details);
+    });
   }
 }
 

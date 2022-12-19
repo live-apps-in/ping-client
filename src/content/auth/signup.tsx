@@ -13,6 +13,7 @@ import { getSearchQuery, getSearchString, handleError } from "src/utils";
 import { loginSchema } from "src/schema";
 import { useAuth } from "src/hooks";
 import { authConfig } from "src/config";
+import { userApi } from 'src/api';
 
 // TODO: rename this and affecting places to register 
 export const SignupPageContent = () => {
@@ -20,29 +21,61 @@ export const SignupPageContent = () => {
   const { register, login } = useAuth();
   const { search } = useLocation();
   const searchQuery: any = getSearchQuery(search);
+  const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const apiHeaderAuthDetails = { 
+    token: searchQuery.token,
+    refreshToken: searchQuery.refreshToken
+  };
 
   useEffect(() => {
-      // if refreshToken and token are not obtained from liveApps portal redirect to the portal to obtain them
-    if(searchQuery?.token && searchQuery?.refreshToken) {
-      redirectToLiveAppsSignup();
-    }
+    handlePrimaryActions();
   }, [search]);
 
-  const redirectToLiveAppsSignup = () => navigate(`${authConfig.liveAppsLoginPage}?${getSearchString({ redirectUrl: authConfig.authPage })}`);
+  const handlePrimaryActions = () => {
+    // if refreshToken and token are not obtained from liveApps portal redirect to the portal to obtain them
+    if(!searchQuery?.token && !searchQuery?.refreshToken) {
+        redirectToLiveAppsLogin();
+    } else {
+      prefetchDetailsFromLiveApps();
+    }
+  };
 
-  const handleSubmit = async (data: REGISTER_USER_DETAILS) => {
+  const prefetchDetailsFromLiveApps = async() => {
+    setLoading(true);
+    try {
+      const details = await userApi.profile(apiHeaderAuthDetails);
+      formik.resetForm({ values: { 
+        ...formik.values,
+        name: details.name,
+        email: details.email,  
+      } });
+    }
+    catch(err) {
+      handleError(err);
+    }
+    setLoading(false);
+  };
+
+  const redirectToLiveAppsLogin = () => navigate(`${authConfig.liveAppsLoginPage}?${getSearchString({ 
+    // include the current search string to the redirect url, to reuse it every where
+    // liveapps portal will giveback the search string we pass to the redirecturl
+    redirectUrl: `${authConfig.authPage}?${getSearchString({ ...searchQuery, signup: true })}`
+  })}`);
+
+  const handleSubmit = async (details: REGISTER_USER_DETAILS) => {
     setSubmitting(true);
     const updatedData = {
-      ...data,
-      user_name: data.user_name + "#" + data.tag,
+      ...details,
+      user_name: details.user_name + "#" + details.tag,
     };
     delete updatedData.tag;
     try {
       // register user with provided details
-      await register(data);
+      await register({ ...details, ...apiHeaderAuthDetails  });
       // once registration is complete, login the user with the refreshToken and token obtained from liveapps portal
-      await login({ token: searchQuery.token, refreshToken: searchQuery.refreshToken });
+      const data = await login(apiHeaderAuthDetails);
+      navigate(`/${searchQuery.backtoURL || data.role}`);
     } catch (err) {
       handleError(err);
     }
@@ -85,7 +118,7 @@ export const SignupPageContent = () => {
   ];
 
   return (
-    <CustomCard headerProps={{ title: "Signup" }}>
+    <CustomCard loading={loading} headerProps={{ title: "Signup" }}>
       <form onSubmit={formik.handleSubmit}>
         <RecursiveContainer
           formik={formik}
@@ -95,7 +128,7 @@ export const SignupPageContent = () => {
         <CustomButton loading={submitting} type="submit">
           Submit
         </CustomButton>
-        <CustomText href={"/auth/login"}>Login</CustomText>
+        <CustomText href={`/auth/login${search}`}>Login</CustomText>
       </form>
     </CustomCard>
   );

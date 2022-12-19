@@ -5,7 +5,7 @@ import { CONFIG_TYPE, CustomButton, CustomCard, CustomText, RecursiveContainer }
 import { authConfig } from 'src/config';
 import { useLiveAppsAuth } from 'src/hooks';
 import { liveAppsAccountsPortalSigninSchema } from 'src/schema';
-import { getSearchQuery, handleError } from 'src/utils';
+import { appendSearchString, getSearchQuery, handleError } from 'src/utils';
 
 export const LoginPortalContent: React.FC = () => {
 
@@ -25,11 +25,10 @@ export const LoginPortalContent: React.FC = () => {
     const handleSubmit = async (details) => {
         setSubmitting(true);
         try {
-            const data = await login(details);
+            await login(details);
             window.flash({ message: 'OTP sent successfully' });
             const navigateUrl = `${authConfig.liveAppsTwoFactorAuthenticationPage.replace(':email', details.email)}${search}`;
             navigate(navigateUrl);
-            console.log(data);
         } catch(err) {
             handleError(err);
         }
@@ -59,7 +58,9 @@ export const LoginPortalContent: React.FC = () => {
                 : <form onSubmit={formik.handleSubmit}>
                     <RecursiveContainer config={config} formik={formik} validationSchema={liveAppsAccountsPortalSigninSchema} />
                     <CustomButton type='submit' loading={submitting}>Signin with Live apps</CustomButton>
-                    <CustomButton href={`${authConfig.liveAppsSignupPage}${search}`}>Signup with Live apps</CustomButton>
+                    <CustomButton href={`${authConfig.liveAppsSignupPage}?${appendSearchString(
+                        [search, { signup: true }]
+                    )}`}>Signup with Live apps</CustomButton>
                 </form>
             }
         </CustomCard>

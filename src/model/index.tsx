@@ -31,9 +31,11 @@ export type REGISTER_USER_DETAILS = {
   email: AUTH_DATA["email"];
   user_name: AUTH_DATA['user_name'];
   tag: AUTH_DATA['tag'];
+  token?: API_HEADER_AUTH_DETAILS['token'];
+  refreshToken?: API_HEADER_AUTH_DETAILS['refreshToken']
 };
 
-export type LOGIN_USER_DETAILS = {
+export type API_HEADER_AUTH_DETAILS = {
   token: string;
   refreshToken: string;
 }

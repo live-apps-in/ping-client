@@ -1,5 +1,5 @@
 import {
-  LOGIN_USER_DETAILS,
+  API_HEADER_AUTH_DETAILS,
 } from "src/model";
 import { createApiFunction } from "src/utils";
 import { authGateway, Gateway } from "./gateway";
@@ -8,7 +8,7 @@ class AuthApi {
   logout(): Promise<void> {
     return createApiFunction(() => authGateway.get("/auth/logout"));
   }
-  getAccessTokenFromRefreshToken(refreshToken: LOGIN_USER_DETAILS['refreshToken']): Promise<{ accessToken: LOGIN_USER_DETAILS['token'] }> {
+  getAccessTokenFromRefreshToken(refreshToken: API_HEADER_AUTH_DETAILS['refreshToken']): Promise<{ accessToken: API_HEADER_AUTH_DETAILS['token'] }> {
     const customGateway = 
       new Gateway({ setupCustomizations: false })
         .setupHeadersForRequestInterceptors({ "x-refresh-token": refreshToken })
