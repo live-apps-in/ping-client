@@ -9,6 +9,9 @@ class FriendApi {
     respondToRequest(requestId: FRIEND_DETAILS['requestId'], action: FRIEND_DETAILS['status']) {
         return createApiFunction(() => gateway.patch(`/friend/request/${requestId}/${action}`));
     }
+    sendFriendRequest(friendId: FRIEND_DETAILS['_id']) {
+        return createApiFunction(() => gateway.post('/friend/request', { friendId }));
+    }
 }
 
 export const friendApi = new FriendApi();

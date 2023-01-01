@@ -1,6 +1,6 @@
 import { AUTH_DATA, API_HEADER_AUTH_DETAILS, REGISTER_USER_DETAILS } from "src/model";
 import { createApiFunction, safeApiCall } from "src/utils";
-import { authGateway } from "src/api";
+import { authGateway, gateway } from "src/api";
 import { authConfig, platformConfig } from "src/config";
 
 class UserApi {
@@ -23,6 +23,9 @@ class UserApi {
     return createApiFunction(async() => {
       return await safeApiCall(() => authGateway.get("/accounts/profile"), details);
     });
+  }
+  fetchUsers() {
+    return createApiFunction(() => gateway.get('/user'));
   }
 }
 

@@ -66,15 +66,31 @@ export type LIVE_APPS_VALIDATE_OTP_RESPONSE = {
 
 // ---------------------------------------------------------------- //
 
-// friend
-export type FRIEND_DETAILS = {
+// users
+export type USER_DETAILS = {
   image?: any;
   name: string;
   email: string;
+}
+
+export type USERS = USER_DETAILS[];
+
+// friend
+export type FRIEND_DETAILS = {
+  image?: USER_DETAILS['image'];
+  name: USER_DETAILS['name'];
+  email: USER_DETAILS['email'];
   status?: 'pending' | 'approved' | 'rejected';
   requestId?: string;
+  _id: string;
 }
 
 export type FRIENDS = FRIEND_DETAILS[]
+
+
+// user-card details
+export type USER_CARD_DETAILS = USER_DETAILS & FRIEND_DETAILS
+
+export type USER_CARDS = USER_CARD_DETAILS[];
 
 export * from "./custom-models";

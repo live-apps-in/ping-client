@@ -35,6 +35,7 @@ export const PingUserLayout: React.FC<{ children?: React.ReactNode }> = ({
   };
 
   const actions = <FlexRow style={{gap: 10}}>
+    <CustomButton href='/ping_user/users'>Users</CustomButton>
     <CustomButton href='/ping_user/friend'>Friends</CustomButton>
     {/* display only if its not the signup page */}
     {!isActiveRoute({ path: pathname, route: authConfig.signupPage }) && (

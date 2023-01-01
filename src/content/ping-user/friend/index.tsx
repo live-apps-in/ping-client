@@ -1,4 +1,3 @@
-import { friendApi } from 'src/api';
 import { useQueryState } from 'src/hooks';
 import { handleError } from 'src/utils';
 import { styled } from '@mui/material';
@@ -11,8 +10,8 @@ export const ViewFriends: React.FC = () => {
 
     const [friends=[], loading] = useQueryState({
         queryKey: 'friend',
-        // queryFn: () => [{ name: 'Jaga', email: 'jaga@mail.com', requestId: 'test', status: 'approved', image: null }],
-        queryFn: friendApi.fetchFriends,
+        queryFn: () => [{ name: 'Jaga', email: 'jaga@mail.com', requestId: 'test', status: 'approved', image: null }],
+        // queryFn: friendApi.fetchFriends,
         onError: handleError
     });
 
