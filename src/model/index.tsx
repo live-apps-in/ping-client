@@ -68,7 +68,11 @@ export type LIVE_APPS_VALIDATE_OTP_RESPONSE = {
 
 // friend
 export type FRIEND_DETAILS = {
-
+  image?: any;
+  name: string;
+  email: string;
+  status?: 'pending' | 'approved' | 'rejected';
+  requestId?: string;
 }
 
 export type FRIENDS = FRIEND_DETAILS[]

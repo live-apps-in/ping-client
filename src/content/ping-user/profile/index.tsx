@@ -3,5 +3,5 @@ export const PingUserProfile: React.FC = () => {
         <div>
             Ping user Profile
         </div>
-    )
-}
+    );
+};

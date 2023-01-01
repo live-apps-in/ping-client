@@ -5,4 +5,4 @@ export const PingUserHomeContent = () => {
 };
 
 export * from './friend';
-export * from './profile'
+export * from './profile';
