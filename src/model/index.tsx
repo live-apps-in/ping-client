@@ -2,7 +2,7 @@
 export interface AUTH_DATA {
   name: string;
   user_name: string;
-  tag: string;
+  user_tag: string;
   email: string;
   role: string;
   _id?: string;
@@ -30,7 +30,7 @@ export type REGISTER_USER_DETAILS = {
   name: AUTH_DATA['name'];
   email: AUTH_DATA["email"];
   user_name: AUTH_DATA['user_name'];
-  tag: AUTH_DATA['tag'];
+  user_tag: AUTH_DATA['user_tag'];
   token?: API_HEADER_AUTH_DETAILS['token'];
   refreshToken?: API_HEADER_AUTH_DETAILS['refreshToken']
 };
@@ -65,5 +65,12 @@ export type LIVE_APPS_VALIDATE_OTP_RESPONSE = {
 }
 
 // ---------------------------------------------------------------- //
+
+// friend
+export type FRIEND_DETAILS = {
+
+}
+
+export type FRIENDS = FRIEND_DETAILS[]
 
 export * from "./custom-models";

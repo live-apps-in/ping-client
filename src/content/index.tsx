@@ -1,3 +1,5 @@
+// don't export other folders from here, to avoid clash in component names
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppLoader } from "src/components";

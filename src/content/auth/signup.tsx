@@ -67,9 +67,9 @@ export const SignupPageContent = () => {
     setSubmitting(true);
     const updatedData = {
       ...details,
-      user_name: details.user_name + "#" + details.tag,
+      user_name: details.user_name + "#" + details.user_tag,
     };
-    delete updatedData.tag;
+    delete updatedData.user_tag;
     try {
       // register user with provided details
       await register({ ...details, ...apiHeaderAuthDetails  });
@@ -86,7 +86,7 @@ export const SignupPageContent = () => {
     initialValues: {
       name: "",
       user_name: "",
-      tag: "",
+      user_tag: "",
       email: "",
     },
     onSubmit: handleSubmit,
@@ -102,10 +102,8 @@ export const SignupPageContent = () => {
       label: "Username",
     },
     {
-      name: "tag",
+      name: "user_tag",
       label: "Tag",
-      type: "number",
-      numberInputProps: { thousandSeparator: false, format: "####" },
       addon: {
         position: "start",
         component: <CustomText>#</CustomText>,

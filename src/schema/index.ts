@@ -12,7 +12,7 @@ export const signUpSchema = yup.object().shape({
     .string()
     .alphaNumeric("Only alphabets and numbers")
     .required("Username is required"),
-  tag: yup.number().length(4, "Should be exactly 4 digits"),
+  user_tag: yup.string().length(4, "Should be exactly 4 digits").required("Tag is required"),
   email: yup.string().email("Invalid Email").required("Email is required"),
 });
 

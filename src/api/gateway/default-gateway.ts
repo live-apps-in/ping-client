@@ -57,6 +57,7 @@ export class Gateway implements IGateway {
     this.axiosInstance.interceptors.response.use(undefined, async (error) => {
       // logout if unauthenticated or token expired
       if (error.response?.status === 401) {
+        alert(error.response.status)
         const refreshToken = getCookie(authConfig.refreshTokenAccessor);
         // redirect to auth route, if you don't have the refreshToken and the current route is not public route
         if (!refreshToken) {
