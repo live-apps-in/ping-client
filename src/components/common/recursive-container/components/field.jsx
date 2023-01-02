@@ -11,6 +11,7 @@ import {
   FormLabel,
   Box,
   Slider,
+  CircularProgress
 } from "@mui/material";
 import { MaterialSelect } from "./material-select";
 import { accessValueByDotNotation, isRequiredField, uniqId } from "src/utils";
@@ -27,6 +28,7 @@ import { CustomNumberInput } from "./number-input";
 import { MaskedText } from "./masked-text";
 import { DateRangeInput } from ".";
 import { MultipleDatePicker } from "./multiple-date-picker";
+import { DebounceInput } from 'react-debounce-input'
 
 export const Field = (props) => {
   const { validationSchema, formik, type, name, addon, onChange, ...rest } =
@@ -133,6 +135,33 @@ export const Field = (props) => {
             ),
             ...rest.InputProps,
             inputComponent: MaskedText,
+          }}
+          inputProps={rest.containerProps}
+          error={error && touched}
+          helperText={
+            error && touched ? error || rest.helperText : rest.helperText
+          }
+        />
+      );
+    case "debounced-input":
+      return (
+        <DebounceInput
+          {...rest}
+          label={rest.label && (isRequired ? `${rest.label} *` : rest.label)}
+          value={value}
+          onChange={(event) => {
+            formik.setFieldValue(name, event.target.value);
+            if (onChange) onChange(event);
+          }}
+          name={name}
+          containerProps={undefined} // to remove the "Invalid DOM property" warning in console
+          InputProps={{
+            [`${addonPosition}Adornment`]: addon && (
+              <InputAdornment position={addonPosition}>
+                {addon.component}
+              </InputAdornment>
+            ),
+            ...rest.InputProps,
           }}
           inputProps={rest.containerProps}
           error={error && touched}

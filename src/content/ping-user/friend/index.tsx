@@ -1,8 +1,9 @@
 import { useQueryState } from 'src/hooks';
 import { handleError } from 'src/utils';
 import { styled } from '@mui/material';
-import { CustomCard } from 'src/components';
+import { CustomButton, CustomCard } from 'src/components';
 import { FriendCard } from './components';
+import { SearchUser } from '../users';
 
 const ViewFriendsContainerWrapper = styled(CustomCard)``;
 
@@ -17,8 +18,19 @@ export const ViewFriends: React.FC = () => {
 
     console.log(friends);
 
+    const handleSearchPeople = () => {
+        window.modal({ 
+            type: 'custom', 
+            component: (props) => <SearchUser {...props} /> ,
+            containerProps: { closeOnClick: true }
+        })
+    }
+
     return (
-        <ViewFriendsContainerWrapper loading={loading} headerProps={{ title: 'Friends' }}>
+        <ViewFriendsContainerWrapper loading={loading} headerProps={{ 
+            title: 'Friends',
+            action: <CustomButton onClick={handleSearchPeople}>Search People</CustomButton>
+        }}>
             {friends.map((friend, index) => (
                 <FriendCard {...friend} key={index} />
             ))}

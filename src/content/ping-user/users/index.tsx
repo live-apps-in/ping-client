@@ -24,3 +24,5 @@ export const Users: React.FC = () => {
         </UsersContainerWrapper>
     );
 };
+
+export * from './search'

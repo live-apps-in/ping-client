@@ -69,17 +69,22 @@ export type LIVE_APPS_VALIDATE_OTP_RESPONSE = {
 // users
 export type USER_DETAILS = {
   image?: any;
-  name: string;
-  email: string;
+  name: REGISTER_USER_DETAILS['name'];
+  user_name: REGISTER_USER_DETAILS['user_name'];
+  user_tag: REGISTER_USER_DETAILS['user_tag'];
+  email: REGISTER_USER_DETAILS['email'];
 }
 
 export type USERS = USER_DETAILS[];
 
+// search users
+export type SEARCH_USER_DETAILS = { 
+  user_name: USER_DETAILS['user_name'], 
+  user_tag: USER_DETAILS['user_tag'] 
+}
+
 // friend
-export type FRIEND_DETAILS = {
-  image?: USER_DETAILS['image'];
-  name: USER_DETAILS['name'];
-  email: USER_DETAILS['email'];
+export interface FRIEND_DETAILS extends USER_DETAILS {
   status?: 'pending' | 'approved' | 'rejected';
   requestId?: string;
   _id: string;

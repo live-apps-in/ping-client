@@ -9,7 +9,7 @@ import type { FormControlLabelProps } from "@mui/material/FormControlLabel";
 import type { FormGroupProps } from "@mui/material/FormGroup";
 import type { ChangeEvent, JSXElementConstructor, ReactElement } from "react";
 import type { RadioProps } from "@mui/material/Radio";
-import { RadioGroupProps, TextFieldProps } from "@mui/material";
+import { RadioGroupProps, TextFieldProps, TextField } from "@mui/material";
 import {
   DatePickerProps,
   DateTimePickerProps,
@@ -19,9 +19,11 @@ import { DayPickerProps } from "react-day-picker";
 import type MaskInput from "react-input-mask";
 import type { NumberFormatProps } from "react-number-format";
 import { Overwrite } from "src/model";
+import { DebounceInputProps } from 'react-debounce-input'
 
 // form-elements / recursive-container
 
+export type CUSTOM_DEBOUNCE_INPUT_PROPS = TextFieldProps & DebounceInputProps<typeof TextField, TextFieldProps>
 // phone input props
 
 export interface PHONE_INPUT_PROPS
@@ -218,6 +220,9 @@ interface CONFIG_BASE {
 interface TEXT_FIELD_TYPE {
   type?: "text" | "password" | "email" | "color" | "";
 }
+interface DEBOUNCE_INPUT_TYPE {
+  type?: "debounce-input";
+}
 interface PHONE_FIELD_TYPE {
   type?: "phone";
 }
@@ -271,6 +276,17 @@ interface SLIDER_INPUT_FIELD_TYPE {
 type TEXT_FIELD_PROPS = Overwrite<
   TextFieldProps & CONFIG_BASE,
   TEXT_FIELD_TYPE
+> & {
+  // other manually defined properties
+  addon?: null | {
+    position?: "end" | "start" | null;
+    component: null | ReactElement;
+  };
+};
+// debounce-input
+type DEBOUNCE_INPUT_PROPS = Overwrite<
+  CUSTOM_DEBOUNCE_INPUT_PROPS & CONFIG_BASE,
+  DEBOUNCE_INPUT_TYPE
 > & {
   // other manually defined properties
   addon?: null | {
@@ -388,6 +404,7 @@ type MASKED_TEXT_FIELD_PROPS = Overwrite<
 // field props
 export type FIELD_PROPS = (
   | TEXT_FIELD_PROPS
+  | DEBOUNCE_INPUT_PROPS
   | PHONE_FIELD_PROPS
   | SELECT_FIELD_PROPS
   | FILE_INPUT_FIELD_PROPS
