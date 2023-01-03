@@ -19,7 +19,7 @@ import { DayPickerProps } from "react-day-picker";
 import type MaskInput from "react-input-mask";
 import type { NumberFormatProps } from "react-number-format";
 import { Overwrite } from "src/model";
-import { DebounceInputProps } from 'react-debounce-input'
+import { DebounceInputProps } from 'react-debounce-input';
 
 // form-elements / recursive-container
 

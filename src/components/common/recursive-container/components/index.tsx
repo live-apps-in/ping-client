@@ -13,4 +13,4 @@ export * from "./time-input";
 export * from "./masked-text";
 export * from "./date-range-input";
 export * from "./multiple-date-picker";
-export * from './custom-debounce-input'
+export * from './custom-debounce-input';

@@ -25,4 +25,4 @@ export const Users: React.FC = () => {
     );
 };
 
-export * from './search'
+export * from './search';

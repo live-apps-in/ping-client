@@ -1,4 +1,4 @@
-import { AUTH_DATA, API_HEADER_AUTH_DETAILS, REGISTER_USER_DETAILS, SEARCH_USER_DETAILS, USERS } from "src/model";
+import { AUTH_DATA, API_HEADER_AUTH_DETAILS, REGISTER_USER_DETAILS, SEARCH_USER_DETAILS, USER_CARD_DETAILS } from "src/model";
 import { createApiFunction, safeApiCall } from "src/utils";
 import { authGateway, gateway } from "src/api";
 import { authConfig, platformConfig } from "src/config";
@@ -27,8 +27,8 @@ class UserApi {
   fetchUsers() {
     return createApiFunction(() => gateway.get('/user'));
   }
-  searchUser(details: SEARCH_USER_DETAILS): Promise<USERS> {
-    return createApiFunction(() => gateway.post('/user/search', details))
+  searchUser(details: SEARCH_USER_DETAILS): Promise<USER_CARD_DETAILS> {
+    return createApiFunction(() => gateway.post('/user/search', details));
   }
 }
 

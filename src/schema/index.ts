@@ -16,5 +16,8 @@ export const signUpSchema = yup.object().shape({
   email: yup.string().email("Invalid Email").required("Email is required"),
 });
 
+export const searchUserSchema = yup.object().shape({
+  user: yup.string().required('User Name is required')
+});
 
 export * from './live-apps-accounts-portal-schema';
