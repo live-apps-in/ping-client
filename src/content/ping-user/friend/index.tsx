@@ -30,7 +30,10 @@ export const ViewFriends: React.FC = () => {
     return (
         <ViewFriendsContainerWrapper loading={loading} headerProps={{ 
             title: 'Friends',
-            action: <CustomButton onClick={handleSearchPeople}>Search People</CustomButton>
+            action: <>
+                <CustomButton onClick={handleSearchPeople}>Search People</CustomButton>
+                <CustomButton href='/ping_user/friend/request'>Requests</CustomButton>
+            </>
         }}>
             {friends.map((friend, index) => (
                 <FriendCard {...friend} key={index} />
