@@ -1,7 +1,7 @@
 import { useState, useEffect, ReactElement } from 'react';
 import Tabs, { TabsProps } from "@mui/material/Tabs";
 import { TabProps } from '@mui/material/Tab';
-import { appendSearchString, getSearchQuery } from 'src/utils';
+import { appendSearchString, getSearchQuery, isNumericValue } from 'src/utils';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export interface CUSTOM_TABS_PROPS extends Omit<TabsProps, 'children'> {
@@ -19,25 +19,25 @@ export const CustomTabNavigation: React.FC<CUSTOM_TABS_PROPS> = (props) => {
 
     useEffect(() => {
         if(currentActiveTab !== undefined)
-            setActiveTab(parseInt(`${props.initialActiveTabIndex || 0}`))
-    }, [])
+            setActiveTab(parseInt(`${props.initialActiveTabIndex || 0}`));
+    }, []);
 
     useEffect(() => {
-        let initialActiveTabIndex: number | string = 0
-        if(props.initialActiveTabIndex !== undefined) {
-            initialActiveTabIndex = props.initialActiveTabIndex
+        let initialActiveTabIndex: number | string = 0;
+        if(isNumericValue(props.initialActiveTabIndex)) {
+            initialActiveTabIndex = props.initialActiveTabIndex;
         }
-        setActiveTab(parseInt(`${currentActiveTab || initialActiveTabIndex}`))
-    }, [currentActiveTab])
+        setActiveTab(parseInt(`${currentActiveTab === undefined ? initialActiveTabIndex : currentActiveTab}`));
+    }, [currentActiveTab]);
 
     const handleTabChange = (_event, newIndex) => {
-        navigate(`${pathname}?${appendSearchString([search, { tab: newIndex }])}`)
-    }
+        navigate(`${pathname}?${appendSearchString([search, { tab: newIndex }])}`);
+    };
 
     return (
         <Tabs {...props} value={parseInt(`${activeTab}`)} onChange={handleTabChange}>
             {props.children}
         </Tabs>
-    )
+    );
 
-}
+};

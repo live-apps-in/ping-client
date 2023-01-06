@@ -8,21 +8,21 @@ import { SentRequests } from "./sent";
 
 const FriendRequestsWrapper = styled('div')`
     display: grid;
-    grid-template-rows: 200px auto;
-`
+    grid-template-rows: 1fr auto;
+`;
 
 const FriendRequestsNavigation = styled('div')`
 
-`
+`;
 
 const FriendRequestsListWrapper = styled('div')`
     overflow: auto;
-`
+`;
 
 export const Request: React.FC = () => {
 
-    const { search } = useLocation()
-    const { tab = '' } = getSearchQuery(search) || {}
+    const { search } = useLocation();
+    const { tab = '' } = getSearchQuery(search) || {};
 
     return (
         <FriendRequestsWrapper>
@@ -32,7 +32,7 @@ export const Request: React.FC = () => {
                     <Tab label='Sent Requests' />
                 </CustomTabNavigation>
             </FriendRequestsNavigation>
-            <FriendRequestsWrapper>
+            <FriendRequestsListWrapper>
                 <CustomTabPanelsContainer initialActiveTabIndex={tab as string}>
                     <CustomTabPanel>
                         <IncomingRequests />
@@ -41,7 +41,7 @@ export const Request: React.FC = () => {
                         <SentRequests />
                     </CustomTabPanel>
                 </CustomTabPanelsContainer>
-            </FriendRequestsWrapper>
+            </FriendRequestsListWrapper>
         </FriendRequestsWrapper>
     );
 };

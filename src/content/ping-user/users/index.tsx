@@ -15,8 +15,6 @@ export const Users: React.FC = () => {
         queryFn: userApi.fetchUsers,
         onError: handleError
     });
-    
-    console.log(users, 'users');
 
     return (
         <UsersContainerWrapper loading={loading} headerProps={{ title: 'Users' }}>

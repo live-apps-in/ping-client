@@ -17,8 +17,6 @@ export const ViewFriends: React.FC = () => {
         onError: handleError
     });
 
-    console.log(friends);
-
     const handleSearchPeople = () => {
         window.modal({ 
             type: 'custom', 
