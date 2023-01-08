@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { styled } from "@mui/material";
 import { CustomButton, CustomCard, CustomText, FlexRow } from "src/components";
 import { imageConfig } from "src/config";
-import { USER_CARD_DETAILS } from "src/model";
+import { FRIEND_REQUEST_RESPOND_STATUS, USER_CARD_DETAILS } from "src/model";
 import { friendApi } from 'src/api';
 import { handleError } from 'src/utils';
 
@@ -28,19 +28,21 @@ const ContentContainer = styled('div')`
 
 `;
 
-export const UserCard: React.FC<USER_CARD_DETAILS> = (props) => {
+export const UserCard: React.FC<USER_CARD_DETAILS & { afterActionComplete?: Function }> = (props) => {
 
-    const { image, name, email, status, requestId, _id } = props;
+    const { image, name, email, status, _id, friendInfo, afterActionComplete } = props;
     const [respondStatus, setRespondStatus] = useState(null);
     const [sendingFriendRequest, setSendingFriendRequest] = useState(false);
 
     const isPending = status === 'pending';
-    const isNew = status !== 'pending' && status !== 'approved' && status !== 'rejected';
+    const isNew = status !== 'pending' && status !== 'accepted' && status !== 'rejected';
 
-    const handleRespondClick = async(status: USER_CARD_DETAILS['status']) => {
+    const handleRespondClick = async(status: FRIEND_REQUEST_RESPOND_STATUS) => {
         setRespondStatus(status);
         try {
-            await friendApi.respondToRequest(requestId, status);
+            await friendApi.respondToRequest(_id, status);
+            window.flash({ message: 'Successfully updated' });
+            if(afterActionComplete) afterActionComplete();
         }
         catch(err) {
             handleError(err);
@@ -52,6 +54,8 @@ export const UserCard: React.FC<USER_CARD_DETAILS> = (props) => {
         setSendingFriendRequest(true);
         try {
             await friendApi.sendFriendRequest(_id);
+            window.flash({ message: 'Successfully sent friend request' });
+            if(afterActionComplete) afterActionComplete();
         } catch(err) {
             handleError(err);
         }
@@ -61,16 +65,16 @@ export const UserCard: React.FC<USER_CARD_DETAILS> = (props) => {
     return (
         <UserCardWrapper>
             <ImageContainerWrapper>
-                <img src={image || imageConfig.defaultAvatar} alt={name} />
+                <img src={((isPending && friendInfo) ? friendInfo.image : image) || imageConfig.defaultAvatar} alt={name} />
             </ImageContainerWrapper>
             <ContentContainer>
                 <div>
-                    <CustomText variant="h3">{name}</CustomText>
-                    <CustomText variant="subtitle1">{email}</CustomText>
+                    <CustomText variant="h3">{(isPending && friendInfo) ? friendInfo.name : name}</CustomText>
+                    <CustomText variant="subtitle1">{(isPending && friendInfo) ? friendInfo.email : email}</CustomText>
                 </div>
-                {isPending && <FlexRow>
-                    <CustomButton onClick={() => handleRespondClick('approved')} loading={respondStatus==='approved'}>Accept</CustomButton>
-                    <CustomButton onClick={() => handleRespondClick('rejected')} loading={respondStatus==='rejected'}>Reject</CustomButton>
+                {isPending && friendInfo && <FlexRow>
+                    <CustomButton onClick={() => handleRespondClick('accept')} loading={respondStatus==='accept'}>Accept</CustomButton>
+                    <CustomButton onClick={() => handleRespondClick('reject')} loading={respondStatus==='reject'}>Reject</CustomButton>
                 </FlexRow>}
                 {isNew && 
                     <CustomButton onClick={handleSendFriendRequestClick} loading={sendingFriendRequest}>

@@ -73,6 +73,7 @@ export type USER_DETAILS = {
   user_name: REGISTER_USER_DETAILS['user_name'];
   user_tag: REGISTER_USER_DETAILS['user_tag'];
   email: REGISTER_USER_DETAILS['email'];
+  _id: string;
 }
 
 export type USERS = USER_DETAILS[];
@@ -85,16 +86,27 @@ export type SEARCH_USER_DETAILS = {
 
 // friend
 export interface FRIEND_DETAILS extends USER_DETAILS {
-  status?: 'pending' | 'approved' | 'rejected';
-  requestId?: string;
-  _id: string;
+  status?: 'pending' | 'accepted' | 'rejected';
 }
 
 export type FRIENDS = FRIEND_DETAILS[]
 
+// friend-request
+export type FRIEND_REQUEST = {
+  friendInfo?: {
+    email: USER_DETAILS['email'];
+    name: USER_CARD_DETAILS['name'];
+    user_name: USER_DETAILS['user_name'];
+    user_tag: USER_DETAILS['user_tag'];
+    image?: USER_DETAILS['image'];
+    _id: USER_DETAILS['_id']
+  }
+}
+
+export type FRIEND_REQUEST_RESPOND_STATUS = 'accept' | 'reject';
 
 // user-card details
-export type USER_CARD_DETAILS = USER_DETAILS & FRIEND_DETAILS
+export type USER_CARD_DETAILS = USER_DETAILS & FRIEND_DETAILS & FRIEND_REQUEST
 
 export type USER_CARDS = USER_CARD_DETAILS[];
 

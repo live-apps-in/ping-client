@@ -1,8 +1,7 @@
 import { useQueryState } from 'src/hooks';
 import { handleError } from 'src/utils';
 import { styled } from '@mui/material';
-import { CustomButton, CustomCard } from 'src/components';
-import { FriendCard } from './components';
+import { CustomButton, CustomCard, UserCard } from 'src/components';
 import { SearchUser } from '../users';
 import { friendApi } from 'src/api';
 
@@ -18,7 +17,7 @@ export const ViewFriends: React.FC = () => {
     });
 
     const handleSearchPeople = () => {
-        window.modal({ 
+        window.modal({
             type: 'custom', 
             component: (props) => <SearchUser {...props} /> ,
             containerProps: { closeOnClick: true }
@@ -34,7 +33,7 @@ export const ViewFriends: React.FC = () => {
             </>
         }}>
             {friends.map((friend, index) => (
-                <FriendCard {...friend} key={index} />
+                <UserCard {...friend} key={index} />
             ))}
         </ViewFriendsContainerWrapper>
     );
