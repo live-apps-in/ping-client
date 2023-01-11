@@ -1,4 +1,4 @@
-import { FRIENDS, FRIEND_DETAILS, FRIEND_REQUEST_RESPOND_STATUS } from "src/model";
+import { FRIENDS, FRIEND_DETAILS, FRIEND_REQUEST_DETAILS, FRIEND_REQUESTS, FRIEND_REQUEST_RESPOND_STATUS } from "src/model";
 import { createApiFunction } from "src/utils";
 import { gateway } from "./gateway";
 
@@ -12,8 +12,8 @@ class FriendApi {
     sendFriendRequest(friendId: FRIEND_DETAILS['_id']) {
         return createApiFunction(() => gateway.post('/friend/request', { friendId }));
     }
-    fetchFriendRequests(): Promise<any> {
-        return createApiFunction(() => gateway.get('/friend/request'));
+    fetchFriendRequests(type: FRIEND_REQUEST_DETAILS['type']): Promise<FRIEND_REQUESTS> {
+        return createApiFunction(() => gateway.get(`/friend/request/${type}`));
     }
 }
 

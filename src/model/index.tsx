@@ -92,7 +92,9 @@ export interface FRIEND_DETAILS extends USER_DETAILS {
 export type FRIENDS = FRIEND_DETAILS[]
 
 // friend-request
-export type FRIEND_REQUEST = {
+export type FRIEND_REQUEST_DETAILS = {
+  createdAt: string | Date;
+  friendId: string;
   friendInfo?: {
     email: USER_DETAILS['email'];
     name: USER_CARD_DETAILS['name'];
@@ -100,13 +102,19 @@ export type FRIEND_REQUEST = {
     user_tag: USER_DETAILS['user_tag'];
     image?: USER_DETAILS['image'];
     _id: USER_DETAILS['_id']
-  }
+  };
+  receiver: string;
+  sender: string;
+  status: FRIEND_DETAILS['status'];
+  type?: 'incoming' | 'outgoing';
 }
+
+export type FRIEND_REQUESTS = FRIEND_REQUEST_DETAILS[];
 
 export type FRIEND_REQUEST_RESPOND_STATUS = 'accept' | 'reject';
 
 // user-card details
-export type USER_CARD_DETAILS = USER_DETAILS & FRIEND_DETAILS & FRIEND_REQUEST
+export type USER_CARD_DETAILS = USER_DETAILS & FRIEND_DETAILS & { friendInfo?: FRIEND_REQUEST_DETAILS['friendInfo'] };
 
 export type USER_CARDS = USER_CARD_DETAILS[];
 

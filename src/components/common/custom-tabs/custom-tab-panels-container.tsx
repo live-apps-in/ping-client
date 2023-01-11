@@ -32,6 +32,7 @@ export const CustomTabPanelsContainer: React.FC<CUSTOM_TAB_PANELS_CONTAINER_PROP
     }, [currentActiveTab]);
 
     const handleChangeIndex = (newIndex) => {
+        // update the search string with new tab index
         navigate(`${pathname}?${appendSearchString([search, { tab: newIndex }])}`);
     };
 

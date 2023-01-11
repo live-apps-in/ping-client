@@ -28,7 +28,7 @@ const ContentContainer = styled('div')`
 
 `;
 
-export const UserCard: React.FC<USER_CARD_DETAILS & { afterActionComplete?: Function }> = (props) => {
+export const UserCard: React.FC<Partial<USER_CARD_DETAILS> & { afterActionComplete?: Function }> = (props) => {
 
     const { image, name, email, status, _id, friendInfo, afterActionComplete } = props;
     const [respondStatus, setRespondStatus] = useState(null);

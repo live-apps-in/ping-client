@@ -11,14 +11,13 @@ const SentRequestsWrapper = styled(CustomCard)`
 export const SentRequests: React.FC = () => {
 
     const [friendRequests = [], loading, { refetch }] = useQueryState({
-        queryKey: "friend-request",
-        queryFn: friendApi.fetchFriendRequests,
+        queryKey: "friend-request.outgoing",
+        queryFn: () => friendApi.fetchFriendRequests('outgoing'),
         onError: handleError
     });
 
     return <SentRequestsWrapper loading={loading}>
-        {friendRequests.filter(request => request.type === 'outgoing')
-            .map((request, index) => 
+        {friendRequests.map((request, index) => 
                 <UserCard {...request} afterActionComplete={refetch} key={index} />
             )
         }
