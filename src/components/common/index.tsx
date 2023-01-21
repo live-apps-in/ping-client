@@ -7,4 +7,5 @@ export * from "./custom-text";
 export * from "./custom-link";
 export * from "./custom-card";
 export * from "./recursive-container";
-export * from './custom-tabs';
+export * from "./custom-tabs";
+export * from "./custom-icon-button";
