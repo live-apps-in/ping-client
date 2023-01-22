@@ -1,9 +1,8 @@
 import { io } from "socket.io-client";
 import { socketConfig, SOCKET_KEYS } from "src/config";
+const socket = io(socketConfig.url);
 
 export function useSocket() {
-  const socket = io(socketConfig.url);
-
   function connectionStatus() {
     socket.on("connect", () => {
       if (socket.connected) {

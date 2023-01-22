@@ -29,11 +29,7 @@ export const Sidebar: React.FC = () => {
   // implement in react-query later
   const [activeTab, setActiveTab] = useState(null);
 
-  const { connectionStatus, createRoom } = useSocket();
-
-  useEffect(() => {
-    connectionStatus();
-  }, []);
+  const { createRoom } = useSocket();
 
   const handleChatMemberClick = (_id, index) => {
     setActiveTab(index);
