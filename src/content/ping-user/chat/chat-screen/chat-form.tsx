@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { styled } from "@mui/material";
 import { useFormik } from "formik";
 import {
@@ -6,6 +7,7 @@ import {
   RecursiveContainer,
 } from "src/components";
 import SendIcon from "@mui/icons-material/Send";
+import { useSocket } from "src/hooks";
 
 const ChatFormContainer = styled("div")`
   border: 1px solid red;
@@ -19,8 +21,15 @@ const ChatFormContainer = styled("div")`
 `;
 
 export const ChatForm: React.FC = () => {
+  const { sendPrivateMessage, receivePrivateMessage } = useSocket();
+
+  useEffect(() => {
+    receivePrivateMessage();
+  }, []);
+
   const handleSubmit = (data) => {
-    console.log(data);
+    console.log("sending", { _id: "test", ...data });
+    sendPrivateMessage({ _id: "test", ...data });
   };
 
   const formik = useFormik({
