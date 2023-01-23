@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { styled } from "@mui/material";
 import { useSocket } from "src/hooks";
 import { SidebarItem } from "./sidebar-item";
@@ -17,43 +17,27 @@ export const Sidebar: React.FC = () => {
     queryFn: chatApi.getChatList,
     onError: handleError,
   });
-  const rooms = [
-    {
-      user: { name: "Jaga", _id: "test" },
-    },
-    {
-      user: { name: "Dikshit", _id: "test" },
-    },
-  ];
 
   // implement in react-query later
   const [activeTab, setActiveTab] = useState(null);
 
   const { createRoom } = useSocket();
 
-  const handleChatMemberClick = (_id, index) => {
-    setActiveTab(index);
-    createRoom(chats.find((el) => el._id === _id));
+  const handleChatMemberClick = (_id) => {
+    setActiveTab(_id);
+    const userDetails = chats.find((el) => el.user._id === _id)?.user;
+    console.log(userDetails);
+    createRoom(userDetails);
   };
 
   return (
     <SidebarContainer>
-      <CustomText>Hardcoded Data for test</CustomText>
-      {rooms.map((room, index) => (
-        <SidebarItem
-          key={index}
-          isActive={activeTab === index}
-          onClick={() => handleChatMemberClick(room.user._id, index)}
-          {...room}
-        />
-      ))}
-      <br />
       <CustomText>Original data from DB</CustomText>
       {chats.map((chat) => (
         <SidebarItem
           key={chat.user._id}
           isActive={activeTab === chat.user._id}
-          onClick={() => handleChatMemberClick(chat.user._id, chat.user._id)}
+          onClick={() => handleChatMemberClick(chat.user._id)}
           {...chat}
         />
       ))}

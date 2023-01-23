@@ -8,6 +8,7 @@ import {
 } from "src/components";
 import SendIcon from "@mui/icons-material/Send";
 import { useSocket } from "src/hooks";
+import { SOCKET_QUERY_CACHE_KEYS } from "src/config";
 
 const ChatFormContainer = styled("div")`
   border: 1px solid red;
@@ -21,15 +22,18 @@ const ChatFormContainer = styled("div")`
 `;
 
 export const ChatForm: React.FC = () => {
-  const { sendPrivateMessage, receivePrivateMessage } = useSocket();
+  const { message, queryClient } = useSocket();
+  const activeRoom: any = queryClient.getQueryData(
+    SOCKET_QUERY_CACHE_KEYS.ACTIVE_ROOM
+  );
 
   useEffect(() => {
-    receivePrivateMessage();
+    message();
   }, []);
 
   const handleSubmit = (data) => {
-    console.log("sending", { _id: "test", ...data });
-    sendPrivateMessage({ _id: "test", ...data });
+    const details = { ...data, ...activeRoom };
+    message(details);
   };
 
   const formik = useFormik({

@@ -53,4 +53,4 @@ export const socketConfig = {
   //   url: "0.tcp.in.ngrok.io:17672",
 };
 
-export * from "./socket-keys";
+export * from "./query-keys";

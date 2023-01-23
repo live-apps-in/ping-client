@@ -1,10 +1,26 @@
+import { QueryClient, useQueryClient } from "react-query";
 import { io } from "socket.io-client";
 import { socketConfig, SOCKET_KEYS } from "src/config";
-const socket = io(socketConfig.url);
+import { useChatConnections } from "./socket-connection-hooks";
+
+export const socket = io(socketConfig.url);
+
+// params provided to child hooks of useSocket
+export interface USE_SOCKET_PARAMS_BASE {
+  socket: typeof socket;
+  queryClient: QueryClient;
+}
 
 export function useSocket() {
+  const queryClient = useQueryClient();
+
+  const chatConnections = useChatConnections({
+    socket,
+    queryClient,
+  });
+
   function connectionStatus() {
-    socket.on("connect", () => {
+    socket.on(SOCKET_KEYS.CONNECT, () => {
       if (socket.connected) {
         console.log("connected");
       } else {
@@ -13,40 +29,10 @@ export function useSocket() {
     });
   }
 
-  function rooms() {
-    return [];
-  }
-
-  function createRoom(details) {
-    socket.emit(SOCKET_KEYS.PRIVATE_CHAT, details);
-  }
-
-  function sendPrivateMessage(details) {
-    return socket.emit(SOCKET_KEYS.SEND_PRIVATE_MESSAGE, details);
-  }
-
-  function receivePrivateMessage() {
-    console.log(
-      SOCKET_KEYS.RECEIVE_PRIVATE_MESSAGE,
-      "receive private message initiated"
-    );
-    // return new Promise((resolve) => {
-    return socket
-      .off(SOCKET_KEYS.RECEIVE_PRIVATE_MESSAGE)
-      .on(SOCKET_KEYS.RECEIVE_PRIVATE_MESSAGE, (data, ack) => {
-        // resolve(data);
-        console.log(data);
-        ack("Received Data");
-      });
-    // });
-  }
-
   return {
-    rooms,
     socket,
     connectionStatus,
-    createRoom,
-    sendPrivateMessage,
-    receivePrivateMessage,
+    queryClient,
+    ...chatConnections,
   };
 }
