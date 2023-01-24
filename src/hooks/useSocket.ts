@@ -1,9 +1,13 @@
 import { QueryClient, useQueryClient } from "react-query";
 import { io } from "socket.io-client";
-import { socketConfig, SOCKET_KEYS } from "src/config";
+import { authConfig, socketConfig, SOCKET_KEYS } from "src/config";
 import { useChatConnections } from "./socket-connection-hooks";
 
-export const socket = io(socketConfig.url);
+export const socket = io(socketConfig.url, {
+  query: {
+    token: localStorage.getItem(authConfig.tokenAccessor),
+  },
+});
 
 // params provided to child hooks of useSocket
 export interface USE_SOCKET_PARAMS_BASE {
