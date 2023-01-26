@@ -1,4 +1,6 @@
 import { styled } from "@mui/material";
+import { SOCKET_QUERY_CACHE_KEYS } from "src/config";
+import { useQueryState } from "src/hooks";
 
 const ChatBodyContainer = styled("div")`
   overflow-x: hidden;
@@ -8,5 +10,18 @@ const ChatBodyContainer = styled("div")`
 `;
 
 export const ChatBody: React.FC = () => {
-  return <ChatBodyContainer>Chat body</ChatBodyContainer>;
+  const [activeRoom] = useQueryState({
+    queryKey: SOCKET_QUERY_CACHE_KEYS.ACTIVE_ROOM,
+  });
+  const isRoomActive = !!activeRoom;
+
+  return (
+    <ChatBodyContainer>
+      {isRoomActive ? (
+        "Chat screen"
+      ) : (
+        <div>Choose a chat to begin conversation</div>
+      )}
+    </ChatBodyContainer>
+  );
 };

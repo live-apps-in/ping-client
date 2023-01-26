@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
 import {
   useQuery,
   UseQueryOptions,
   QueryKey,
   UseQueryResult,
+  QueryObserver,
+  useQueryClient,
 } from "react-query";
 
 interface UseStateQueryResult<TData = unknown>
@@ -30,3 +33,56 @@ export function useQueryState<
 
   return [data, isLoading, returnOptions];
 }
+
+export function useQueryWithDependencies<T = unknown>(
+  callback: () => T,
+  dependencies: any[]
+) {
+  const [data, setData] = useState<T>(undefined);
+
+  useEffect(() => {
+    (async () => {
+      const fetchedData = await callback();
+      setData(fetchedData);
+    })();
+  }, dependencies);
+
+  return data;
+}
+
+// export function useQueryWithDependencyQueryKeys<T = unknown>(
+//   callback: (unsubscribe?: () => void) => T,
+//   dependencyQueryKeys: string[]
+// ) {
+//   const queryClient = useQueryClient();
+//   const [data, setData] = useState<T>(undefined);
+//   const observer = new QueryObserver(queryClient, {
+//     queryKey: dependencyQueryKeys,
+//   });
+//   const unsubscribe = observer.subscribe(async () => {
+//     const fetchedData = await callback(unsubscribe);
+//     setData(fetchedData);
+//   });
+
+//   useEffect(() => {
+//     return unsubscribe;
+//   }, []);
+
+//   return data;
+// }
+
+// export function useListenQueryKeys(queryKeys: string[]) {
+//   const queryClient = useQueryClient();
+//   const [data, setData] = useState(undefined);
+//   const observer = new QueryObserver(queryClient, {
+//     queryKey: queryKeys,
+//   });
+//   const unsubscribe = observer.subscribe((result) => {
+//     setData(result.data);
+//   });
+//   useEffect(() => {
+//     return unsubscribe;
+//   }, []);
+
+//   return data;
+// }

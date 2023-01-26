@@ -16,6 +16,7 @@ export const Sidebar: React.FC = () => {
     queryKey: "chats",
     queryFn: chatApi.getChatList,
     onError: handleError,
+    refetchOnWindowFocus: false,
   });
 
   // implement in react-query later
@@ -26,7 +27,7 @@ export const Sidebar: React.FC = () => {
   const handleChatMemberClick = (_id) => {
     setActiveTab(_id);
     const userDetails = chats.find((el) => el.user._id === _id)?.user;
-    console.log(userDetails);
+    // console.log(userDetails);
     createRoom(userDetails);
   };
 

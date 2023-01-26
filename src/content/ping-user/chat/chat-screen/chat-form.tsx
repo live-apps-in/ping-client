@@ -7,7 +7,7 @@ import {
   RecursiveContainer,
 } from "src/components";
 import SendIcon from "@mui/icons-material/Send";
-import { useSocket } from "src/hooks";
+import { useQueryState, useSocket } from "src/hooks";
 import { SOCKET_QUERY_CACHE_KEYS } from "src/config";
 
 const ChatFormContainer = styled("div")`
@@ -22,10 +22,11 @@ const ChatFormContainer = styled("div")`
 `;
 
 export const ChatForm: React.FC = () => {
-  const { message, queryClient } = useSocket();
-  const activeRoom: any = queryClient.getQueryData(
-    SOCKET_QUERY_CACHE_KEYS.ACTIVE_ROOM
-  );
+  const { message } = useSocket();
+  const [activeRoom] = useQueryState<any>({
+    queryKey: SOCKET_QUERY_CACHE_KEYS.ACTIVE_ROOM,
+  });
+  const isRoomActive = !!activeRoom;
 
   useEffect(() => {
     message();
@@ -55,13 +56,15 @@ export const ChatForm: React.FC = () => {
   ];
 
   return (
-    <ChatFormContainer>
-      <form onSubmit={formik.handleSubmit}>
-        <RecursiveContainer formik={formik} config={config} />
-        <CustomIconButton type="submit">
-          <SendIcon />
-        </CustomIconButton>
-      </form>
-    </ChatFormContainer>
+    isRoomActive && (
+      <ChatFormContainer>
+        <form onSubmit={formik.handleSubmit}>
+          <RecursiveContainer formik={formik} config={config} />
+          <CustomIconButton type="submit">
+            <SendIcon />
+          </CustomIconButton>
+        </form>
+      </ChatFormContainer>
+    )
   );
 };
