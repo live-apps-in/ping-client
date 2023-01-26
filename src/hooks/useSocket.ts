@@ -5,7 +5,7 @@ import { useChatConnections } from "./socket-connection-hooks";
 
 export const socket = io(socketConfig.url, {
   query: {
-    token: localStorage.getItem(authConfig.refreshTokenAccessor),
+    token: localStorage.getItem(authConfig.tokenAccessor),
   },
 });
 

@@ -16,10 +16,10 @@ export const useChatConnections = (params: USE_CHAT_CONNECTIONS) => {
     if (details) {
       return socket.emit(SOCKET_KEYS.MESSAGE, details);
     }
-    return socket.on(SOCKET_KEYS.MESSAGE, (data, ack) => {
+    return socket.on(SOCKET_KEYS.MESSAGE, (data) => {
       // resolve(data);
       console.log(data);
-      ack("Received Data");
+      // ack("Received Data");
     });
   }
 
