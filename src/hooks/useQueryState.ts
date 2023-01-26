@@ -4,8 +4,6 @@ import {
   UseQueryOptions,
   QueryKey,
   UseQueryResult,
-  QueryObserver,
-  useQueryClient,
 } from "react-query";
 
 interface UseStateQueryResult<TData = unknown>

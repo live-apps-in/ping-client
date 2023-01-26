@@ -1,6 +1,9 @@
 import { styled } from "@mui/material";
 import { SOCKET_QUERY_CACHE_KEYS } from "src/config";
-import { useQueryState } from "src/hooks";
+import {
+  useQueryState,
+  // useSocket
+} from "src/hooks";
 
 const ChatBodyContainer = styled("div")`
   overflow-x: hidden;
@@ -10,14 +13,19 @@ const ChatBodyContainer = styled("div")`
 `;
 
 export const ChatBody: React.FC = () => {
-  const [activeRoom] = useQueryState({
-    queryKey: SOCKET_QUERY_CACHE_KEYS.ACTIVE_ROOM,
+  // const { utils } = useSocket();
+  // const activeRoom = utils.chatUtils.getActiveRoom();
+  const [activeChatId] = useQueryState({
+    queryKey: `${SOCKET_QUERY_CACHE_KEYS.CHAT}.activeChatId`,
   });
-  const isRoomActive = !!activeRoom;
+  // const [activeChat = {}] = useQueryState<Object>({
+  //   queryKey: `${SOCKET_QUERY_CACHE_KEYS.CHAT}.${activeChatId}`,
+  // });
+  // const isActiveChatAvailable = !!activeChat;
 
   return (
     <ChatBodyContainer>
-      {isRoomActive ? (
+      {activeChatId ? (
         "Chat screen"
       ) : (
         <div>Choose a chat to begin conversation</div>

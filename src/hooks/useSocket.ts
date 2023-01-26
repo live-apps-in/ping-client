@@ -18,7 +18,7 @@ export interface USE_SOCKET_PARAMS_BASE {
 export function useSocket() {
   const queryClient = useQueryClient();
 
-  const chatConnections = useChatConnections({
+  const { chatUtils, ...chatConnections } = useChatConnections({
     socket,
     queryClient,
   });
@@ -38,5 +38,8 @@ export function useSocket() {
     connectionStatus,
     queryClient,
     ...chatConnections,
+    utils: {
+      chatUtils,
+    },
   };
 }

@@ -5,5 +5,5 @@ export enum SOCKET_KEYS {
 }
 
 export enum SOCKET_QUERY_CACHE_KEYS {
-  ACTIVE_ROOM = "active_room",
+  CHAT = "chat",
 }

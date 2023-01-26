@@ -26,9 +26,8 @@ export const Sidebar: React.FC = () => {
 
   const handleChatMemberClick = (_id) => {
     setActiveTab(_id);
-    const userDetails = chats.find((el) => el.user._id === _id)?.user;
-    // console.log(userDetails);
-    createRoom(userDetails);
+    const chatDetails = chats.find((el) => el.user._id === _id);
+    createRoom({ _id: chatDetails._id });
   };
 
   return (

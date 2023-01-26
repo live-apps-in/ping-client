@@ -27,6 +27,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 // react-query setup -- https://react-query.tanstack.com/quick-start
 import { QueryClientProvider, QueryClient } from "react-query";
 import { CustomModal, ErrorBoundary, FlashMessage } from "src/components";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -40,6 +41,7 @@ const App: React.FC = () => {
       <CacheProvider value={clientSideEmotionCache}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={false} />
             <StoreProvider store={store}>
               <ThemeProvider>
                 <SnackbarProvider
