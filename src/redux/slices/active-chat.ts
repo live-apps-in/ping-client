@@ -40,6 +40,13 @@ const activeChatSlice = createSlice({
       ..._state,
       messages: action.payload,
     }),
+    updatePaginatedMessages: (
+      _state: CHAT_STATE,
+      action: PayloadAction<CHAT_STATE["messages"]>
+    ) => ({
+      ..._state,
+      messages: { ...action.payload, ..._state.messages },
+    }),
     updateMessages: (
       _state: CHAT_STATE,
       action: PayloadAction<CHAT_MESSAGE_DETAILS>

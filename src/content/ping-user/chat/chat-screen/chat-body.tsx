@@ -1,4 +1,7 @@
 import { styled } from "@mui/material";
+import { useEffect } from "react";
+import { CustomButton } from "src/components";
+import { useActions, usePaginatedChat } from "src/hooks";
 import { useSelector } from "src/redux";
 import { ChatBubble } from "./chat-bubble";
 
@@ -14,12 +17,17 @@ const ChatBodyContainer = styled("div")`
 export const ChatBody: React.FC = () => {
   const { activeChat } = useSelector((state) => state);
   const isChatActive = !!(activeChat.details && activeChat.details._id);
-  const { messages } = activeChat;
+  const { messages, updateChatLog } = usePaginatedChat();
 
   return (
     <ChatBodyContainer>
       {isChatActive ? (
-        messages.map((el, index) => <ChatBubble {...el} key={index} />)
+        <>
+          <CustomButton onClick={updateChatLog}>Load more</CustomButton>
+          {messages.map((el, index) => (
+            <ChatBubble {...el} key={index} />
+          ))}
+        </>
       ) : (
         <div>Choose a chat to begin conversation</div>
       )}
