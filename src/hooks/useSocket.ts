@@ -1,4 +1,4 @@
-import { QueryClient, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 import { io } from "socket.io-client";
 import { authConfig, socketConfig, SOCKET_KEYS } from "src/config";
 import { useChatConnections } from "./socket-connection-hooks";

@@ -4,6 +4,7 @@ import { useSelector } from "src/redux";
 const ChatHeaderContainer = styled("div")`
   border: 1px solid red;
   padding: 10px;
+  height: 60px;
 `;
 
 export const ChatHeader: React.FC = () => {

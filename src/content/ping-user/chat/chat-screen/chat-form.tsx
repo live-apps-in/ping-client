@@ -9,10 +9,12 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 import { useAuth, useSelector, useSocket } from "src/hooks";
 import { CHAT_MESSAGE_DETAILS } from "src/model";
+import { chatSchema } from "src/schema";
 
 const ChatFormContainer = styled("div")`
   border: 1px solid red;
   padding: 5px;
+  height: 60px;
   form {
     width: 100%;
     display: grid;
@@ -43,6 +45,7 @@ export const ChatForm: React.FC = () => {
       timeStamp: new Date(),
       ...data,
     };
+    formik.resetForm({ values: { message: "" } });
     console.log(details);
     sendMessage(details);
   };
@@ -52,6 +55,7 @@ export const ChatForm: React.FC = () => {
       message: "",
     },
     onSubmit: handleSubmit,
+    validationSchema: chatSchema,
   });
 
   const config: CONFIG_TYPE = [

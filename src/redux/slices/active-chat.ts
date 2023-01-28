@@ -50,14 +50,17 @@ const activeChatSlice = createSlice({
       if (
         currentMessages.find(
           (el) =>
-            el._id === newMessage._id && el.timeStamp === newMessage.timeStamp
+            el._id === newMessage._id &&
+            new Date(el.timeStamp).getTime() ===
+              new Date(newMessage.timeStamp).getTime()
         )
       ) {
         currentMessages = currentMessages.map((el) => {
           // replace the existing message log with this. Because this is the message which we confirmed that it is sent to the user and only the loading state will be changed
           if (
             el._id === newMessage._id &&
-            el.timeStamp === newMessage.timeStamp
+            new Date(el.timeStamp).getTime() ===
+              new Date(newMessage.timeStamp).getTime()
           ) {
             return action.payload;
           }
