@@ -30,15 +30,16 @@ export const ChatForm: React.FC = () => {
 
   // userId
   const { data: profileDetails } = useAuth();
-  const userId = profileDetails?.id;
+  const userId = profileDetails?._id;
 
   useEffect(() => {
     if (isChatActive) listenMessage();
-  }, [isChatActive, activeChat]);
+  }, [isChatActive]);
 
   const handleSubmit = (data) => {
     const details: CHAT_MESSAGE_DETAILS = {
-      _id: userId,
+      _id: activeChatId,
+      userId,
       timeStamp: new Date(),
       ...data,
     };
@@ -63,7 +64,7 @@ export const ChatForm: React.FC = () => {
       },
     },
   ];
-  console.log("chat details:", activeChat);
+  // console.log("chat details:", activeChat);
 
   return (
     isChatActive && (

@@ -5,7 +5,7 @@ export interface AUTH_DATA {
   user_tag: string;
   email: string;
   role: string;
-  id?: string;
+  _id?: string;
   image?: string | null;
 }
 export interface AUTH_STATE {
@@ -28,7 +28,8 @@ export type CHAT_STATE = {
 };
 
 export type CHAT_MESSAGE_DETAILS = {
-  _id: string; // user's _id who is the author of the message
+  userId: string; // user's _id who is the author of the message
+  _id: string; // chatId
   message: string;
   isLoading?: boolean;
   timeStamp: Date | null;

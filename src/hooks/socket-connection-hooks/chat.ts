@@ -30,14 +30,17 @@ export const useChatConnections = (params: USE_CHAT_CONNECTIONS) => {
   }
 
   function listenMessage() {
-    return socket.on(SOCKET_KEYS.MESSAGE, (data: CHAT_MESSAGE_DETAILS) => {
-      console.log(data);
-      activeChatActions.updateMessages({
-        ...data,
-        isLoading: false,
+    // console.log("listening");
+    return socket
+      .off(SOCKET_KEYS.MESSAGE)
+      .on(SOCKET_KEYS.MESSAGE, (data: CHAT_MESSAGE_DETAILS) => {
+        console.log(data);
+        activeChatActions.updateMessages({
+          ...data,
+          isLoading: false,
+        });
+        // ack("Received Data");
       });
-      // ack("Received Data");
-    });
   }
 
   return { createRoom, sendMessage, listenMessage };
