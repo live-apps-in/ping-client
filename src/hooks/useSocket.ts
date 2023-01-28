@@ -12,15 +12,13 @@ export const socket = io(socketConfig.url, {
 // params provided to child hooks of useSocket
 export interface USE_SOCKET_PARAMS_BASE {
   socket: typeof socket;
-  queryClient: QueryClient;
 }
 
 export function useSocket() {
   const queryClient = useQueryClient();
 
-  const { chatUtils, ...chatConnections } = useChatConnections({
+  const chatConnections = useChatConnections({
     socket,
-    queryClient,
   });
 
   function connectionStatus() {
@@ -38,8 +36,5 @@ export function useSocket() {
     connectionStatus,
     queryClient,
     ...chatConnections,
-    utils: {
-      chatUtils,
-    },
   };
 }

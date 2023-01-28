@@ -7,8 +7,8 @@ import {
   RecursiveContainer,
 } from "src/components";
 import SendIcon from "@mui/icons-material/Send";
-import { useAuth, useQueryState, useSocket } from "src/hooks";
-import { SOCKET_QUERY_CACHE_KEYS } from "src/config";
+import { useAuth, useSelector, useSocket } from "src/hooks";
+import { CHAT_MESSAGE_DETAILS } from "src/model";
 
 const ChatFormContainer = styled("div")`
   border: 1px solid red;
@@ -23,24 +23,26 @@ const ChatFormContainer = styled("div")`
 
 export const ChatForm: React.FC = () => {
   const { sendMessage, listenMessage } = useSocket();
-  const [activeChatId] = useQueryState({
-    queryKey: `${SOCKET_QUERY_CACHE_KEYS.CHAT}.activeChatId`,
-  });
-  const [activeChat = {}] = useQueryState<Object>({
-    queryKey: `${SOCKET_QUERY_CACHE_KEYS.CHAT}.${activeChatId}.details`,
-  });
-  const isActiveChatAvailable = !!activeChatId;
+  const { activeChat } = useSelector((state) => state);
+  const activeChatDetails = activeChat.details;
+  const activeChatId = activeChatDetails?._id;
+  const isChatActive = !!activeChatId;
 
   // userId
   const { data: profileDetails } = useAuth();
   const userId = profileDetails?.id;
 
   useEffect(() => {
-    if (activeChatId) listenMessage({ _id: activeChatId });
-  }, [activeChatId]);
+    if (isChatActive) listenMessage();
+  }, [isChatActive, activeChat]);
 
   const handleSubmit = (data) => {
-    const details = { data: { ...data, userId }, ...activeChat };
+    const details: CHAT_MESSAGE_DETAILS = {
+      _id: userId,
+      timeStamp: new Date(),
+      ...data,
+    };
+    console.log(details);
     sendMessage(details);
   };
 
@@ -64,7 +66,7 @@ export const ChatForm: React.FC = () => {
   console.log("chat details:", activeChat);
 
   return (
-    isActiveChatAvailable && (
+    isChatActive && (
       <ChatFormContainer>
         <form onSubmit={formik.handleSubmit}>
           <RecursiveContainer formik={formik} config={config} />

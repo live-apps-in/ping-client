@@ -6,13 +6,14 @@ import { useQueryState } from "src/hooks";
 import { chatApi } from "src/api";
 import { handleError } from "src/utils";
 import { CustomText } from "src/components";
+import { CHAT_LIST } from "src/model";
 
 const SidebarContainer = styled("div")`
   border: 1px solid red;
 `;
 
 export const Sidebar: React.FC = () => {
-  const [chats = [], loading] = useQueryState({
+  const [chats = [], loading] = useQueryState<CHAT_LIST>({
     queryKey: "chats",
     queryFn: chatApi.getChatList,
     onError: handleError,
@@ -27,7 +28,7 @@ export const Sidebar: React.FC = () => {
   const handleChatMemberClick = (_id) => {
     setActiveTab(_id);
     const chatDetails = chats.find((el) => el.user._id === _id);
-    createRoom({ _id: chatDetails._id });
+    createRoom({ _id: chatDetails._id, name: chatDetails.user?.name });
   };
 
   return (

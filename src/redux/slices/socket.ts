@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// if you have any socket details that should be used globally, save them here
 const initialState = {};
 
 const socketSlice = createSlice({

@@ -19,6 +19,33 @@ export interface INITIALIZE_ACTION {
   data: AUTH_DATA | null;
 }
 
+// chat slice
+export type CHAT_STATE = {
+  details: ACTIVE_CHAT_DETAILS | null;
+  name: string;
+  messages: CHAT_MESSAGE_DETAILS[];
+  userStatus: CHAT_USER_STATUS;
+};
+
+export type CHAT_MESSAGE_DETAILS = {
+  _id: string; // user's _id who is the author of the message
+  message: string;
+  isLoading?: boolean;
+  timeStamp: Date | null;
+};
+
+export type ACTIVE_CHAT_DETAILS = {
+  _id: string; // chatId
+  name: string;
+};
+
+export type CHAT_USER_STATUS = {
+  isTyping?: boolean;
+  usersTyping?: USERS;
+  isOnline?: boolean;
+  lastSeen?: Date | null;
+};
+
 // hooks
 // auth
 export interface USE_AUTH_OPTIONS {
@@ -38,6 +65,17 @@ export type REGISTER_USER_DETAILS = {
 export type API_HEADER_AUTH_DETAILS = {
   token: string;
   refreshToken: string;
+};
+
+// chat api
+export type CHAT_LIST = CHAT_LIST_DETAILS[];
+
+export type CHAT_LIST_DETAILS = {
+  _id: string; // chatId
+  chatType: "DM";
+  modifiedAt: Date | string | null;
+  user: USER_DETAILS;
+  users: USER_DETAILS["_id"][];
 };
 
 // live apps auth

@@ -1,4 +1,5 @@
 import { styled } from "@mui/material";
+import { useSelector } from "src/redux";
 
 const ChatHeaderContainer = styled("div")`
   border: 1px solid red;
@@ -6,5 +7,7 @@ const ChatHeaderContainer = styled("div")`
 `;
 
 export const ChatHeader: React.FC = () => {
-  return <ChatHeaderContainer>Header</ChatHeaderContainer>;
+  const { activeChat } = useSelector((state) => state);
+
+  return <ChatHeaderContainer>{activeChat.name}</ChatHeaderContainer>;
 };
