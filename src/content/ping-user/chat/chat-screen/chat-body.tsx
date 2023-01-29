@@ -1,7 +1,6 @@
 import { styled } from "@mui/material";
-import { useEffect } from "react";
 import { CustomButton } from "src/components";
-import { useActions, usePaginatedChat } from "src/hooks";
+import { usePaginatedChat } from "src/hooks";
 import { useSelector } from "src/redux";
 import { ChatBubble } from "./chat-bubble";
 

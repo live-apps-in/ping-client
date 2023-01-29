@@ -45,7 +45,7 @@ const activeChatSlice = createSlice({
       action: PayloadAction<CHAT_STATE["messages"]>
     ) => ({
       ..._state,
-      messages: { ...action.payload, ..._state.messages },
+      messages: [...action.payload, ..._state.messages],
     }),
     updateMessages: (
       _state: CHAT_STATE,
