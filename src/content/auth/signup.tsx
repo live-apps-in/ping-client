@@ -9,13 +9,18 @@ import {
   RecursiveContainer,
 } from "src/components";
 import { REGISTER_USER_DETAILS } from "src/model";
-import { getSearchQuery, getSearchString, handleError } from "src/utils";
+import {
+  getSearchQuery,
+  getSearchString,
+  handleError,
+  navigateToUrl,
+} from "src/utils";
 import { loginSchema } from "src/schema";
 import { useAuth } from "src/hooks";
-import { authConfig } from "src/config";
-import { userApi } from 'src/api';
+import { authConfig, projectConfig } from "src/config";
+import { userApi } from "src/api";
 
-// TODO: rename this and affecting places to register 
+// TODO: rename this and affecting places to register
 export const SignupPageContent = () => {
   const navigate = useNavigate();
   const { register, login } = useAuth();
@@ -23,9 +28,9 @@ export const SignupPageContent = () => {
   const searchQuery: any = getSearchQuery(search);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const apiHeaderAuthDetails = { 
+  const apiHeaderAuthDetails = {
     token: searchQuery.token,
-    refreshToken: searchQuery.refreshToken
+    refreshToken: searchQuery.refreshToken,
   };
 
   useEffect(() => {
@@ -34,34 +39,43 @@ export const SignupPageContent = () => {
 
   const handlePrimaryActions = () => {
     // if refreshToken and token are not obtained from liveApps portal redirect to the portal to obtain them
-    if(!searchQuery?.token && !searchQuery?.refreshToken) {
-        redirectToLiveAppsLogin();
+    if (!searchQuery?.token && !searchQuery?.refreshToken) {
+      redirectToLiveAppsLogin();
     } else {
       prefetchDetailsFromLiveApps();
     }
   };
 
-  const prefetchDetailsFromLiveApps = async() => {
+  const prefetchDetailsFromLiveApps = async () => {
     setLoading(true);
     try {
       const details = await userApi.profile(apiHeaderAuthDetails);
-      formik.resetForm({ values: { 
-        ...formik.values,
-        name: details.name,
-        email: details.email,  
-      } });
-    }
-    catch(err) {
+      formik.resetForm({
+        values: {
+          ...formik.values,
+          name: details.name,
+          email: details.email,
+        },
+      });
+    } catch (err) {
       handleError(err);
     }
     setLoading(false);
   };
 
-  const redirectToLiveAppsLogin = () => navigate(`${authConfig.liveAppsLoginPage}?${getSearchString({ 
-    // include the current search string to the redirect url, to reuse it every where
-    // liveapps portal will giveback the search string we pass to the redirecturl
-    redirectUrl: `${authConfig.authPage}?${getSearchString({ ...searchQuery, signup: true })}`
-  })}`);
+  const redirectToLiveAppsLogin = () =>
+    navigateToUrl(
+      `${authConfig.liveAppsPortal}?${getSearchString({
+        // include the current search string to the redirect url, to reuse it every where
+        // liveapps portal will giveback the search string we pass to the redirecturl
+        redirectUrl: `${projectConfig.appBaseurl}${
+          authConfig.authPage
+        }?${getSearchString({
+          ...searchQuery,
+          signup: true,
+        })}`,
+      })}`
+    );
 
   const handleSubmit = async (details: REGISTER_USER_DETAILS) => {
     setSubmitting(true);
@@ -72,7 +86,7 @@ export const SignupPageContent = () => {
     delete updatedData.user_tag;
     try {
       // register user with provided details
-      await register({ ...details, ...apiHeaderAuthDetails  });
+      await register({ ...details, ...apiHeaderAuthDetails });
       // once registration is complete, login the user with the refreshToken and token obtained from liveapps portal
       const data = await login(apiHeaderAuthDetails);
       navigate(`/${searchQuery.backtoURL || data.role}`);
@@ -112,6 +126,7 @@ export const SignupPageContent = () => {
     {
       name: "email",
       label: "Email",
+      disabled: true,
     },
   ];
 

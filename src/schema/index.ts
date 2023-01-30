@@ -26,5 +26,3 @@ export const searchUserSchema = yup.object().shape({
 export const chatSchema = yup.object().shape({
   message: yup.string().required(),
 });
-
-export * from "./live-apps-accounts-portal-schema";

@@ -23,7 +23,7 @@ class UserApi {
       return await safeApiCall(
         () =>
           authGateway.post(
-            `/accounts/apps/register/${platformConfig.ping}`,
+            `/${platformConfig.accounts}/apps/register/${platformConfig.ping}`,
             details
           ),
         safeApiCallDetails
@@ -32,7 +32,10 @@ class UserApi {
   }
   profile(details?: API_HEADER_AUTH_DETAILS): Promise<AUTH_DATA> {
     return createApiFunction(async () => {
-      return await safeApiCall(() => gateway.get("/user/profile"), details);
+      return await safeApiCall(
+        () => authGateway.get(`${platformConfig.accounts}/profile`),
+        details
+      );
     });
   }
   fetchUsers() {
