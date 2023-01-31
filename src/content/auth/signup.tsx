@@ -49,7 +49,7 @@ export const SignupPageContent = () => {
   const prefetchDetailsFromLiveApps = async () => {
     setLoading(true);
     try {
-      const details = await userApi.profile(apiHeaderAuthDetails);
+      const details = await userApi.accountsProfile(apiHeaderAuthDetails);
       formik.resetForm({
         values: {
           ...formik.values,

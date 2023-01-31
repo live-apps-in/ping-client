@@ -5,6 +5,6 @@ export * from "./useActions";
 export * from "./useQueryState";
 export * from "./useUniqueKey";
 export * from "./useSocket";
-export * from "./usePaginatedChat";
+export * from "./useChat";
 
 export { useSelector, useDispatch };

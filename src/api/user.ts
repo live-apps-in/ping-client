@@ -30,7 +30,10 @@ class UserApi {
       );
     });
   }
-  profile(details?: API_HEADER_AUTH_DETAILS): Promise<AUTH_DATA> {
+  profile(): Promise<AUTH_DATA> {
+    return createApiFunction(() => gateway.get("/user/profile"));
+  }
+  accountsProfile(details?: API_HEADER_AUTH_DETAILS): Promise<AUTH_DATA> {
     return createApiFunction(async () => {
       return await safeApiCall(
         () => authGateway.get(`${platformConfig.accounts}/profile`),

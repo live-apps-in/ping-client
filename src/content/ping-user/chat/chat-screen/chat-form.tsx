@@ -24,7 +24,7 @@ const ChatFormContainer = styled("div")`
 `;
 
 export const ChatForm: React.FC = () => {
-  const { sendMessage, listenMessage } = useSocket();
+  const { sendMessage } = useSocket();
   const { activeChat } = useSelector((state) => state);
   const activeChatDetails = activeChat.details;
   const activeChatId = activeChatDetails?._id;
@@ -34,15 +34,10 @@ export const ChatForm: React.FC = () => {
   const { data: profileDetails } = useAuth();
   const userId = profileDetails?._id;
 
-  useEffect(() => {
-    if (isChatActive) listenMessage();
-  }, [isChatActive]);
-
   const handleSubmit = (data) => {
     const details: CHAT_MESSAGE_DETAILS = {
-      _id: activeChatId,
-      userId,
-      timeStamp: new Date(),
+      sender: userId,
+      createdAt: new Date(),
       ...data,
     };
     formik.resetForm({ values: { message: "" } });

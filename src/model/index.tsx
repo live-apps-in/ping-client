@@ -28,15 +28,17 @@ export type CHAT_STATE = {
 };
 
 export type CHAT_MESSAGE_DETAILS = {
-  userId: string; // user's _id who is the author of the message
-  _id: string; // chatId
+  sender: AUTH_DATA["_id"]; // user's _id who is the author of the message
+  _id: string; // messageId
+  chatId: string;
   message: string;
   isLoading?: boolean;
-  timeStamp: Date | null;
+  createdAt: Date | null;
+  type: "DM";
 };
 
 export type ACTIVE_CHAT_DETAILS = {
-  _id: string; // chatId
+  _id: CHAT_MESSAGE_DETAILS["chatId"]; // chatId
   name: string;
 };
 

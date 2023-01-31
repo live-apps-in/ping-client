@@ -36,23 +36,23 @@ const ChatBubbleFooter = styled(FlexRow)`
 `;
 
 export const ChatBubble: React.FC<CHAT_MESSAGE_DETAILS> = (props) => {
-  const { userId, _id, message, timeStamp, isLoading } = props;
+  const { sender, message, createdAt, isLoading } = props;
   const { _id: currentUserId } = useSelector((state) => state.auth.data);
 
-  const isSelfChatBubble = userId === currentUserId;
+  const isSelfChatBubble = sender === currentUserId;
 
   return (
     <ChatBubbleContainer rightAlign={isSelfChatBubble}>
       <ChatBubbleWrapper>
         <ChatBubbleTitleWraper>
-          <CustomText variant="body2">{_id}</CustomText>
+          <CustomText variant="body2">{sender}</CustomText>
         </ChatBubbleTitleWraper>
         <ChatBubbleMessageWrapper>
           <CustomText variant="body1">{message}</CustomText>
         </ChatBubbleMessageWrapper>
         <ChatBubbleFooter>
           <CustomText align="right" variant="caption">
-            {getTimeCollapsed(timeStamp)}
+            {getTimeCollapsed(createdAt)}
           </CustomText>
         </ChatBubbleFooter>
       </ChatBubbleWrapper>

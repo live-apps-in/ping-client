@@ -19,6 +19,9 @@ const activeChatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    resetActiveChat: (_state: CHAT_STATE) => ({
+      ...initialState,
+    }),
     setActiveChatDetails: (
       _state: CHAT_STATE,
       action: PayloadAction<CHAT_STATE["details"]>
@@ -58,16 +61,16 @@ const activeChatSlice = createSlice({
         currentMessages.find(
           (el) =>
             el._id === newMessage._id &&
-            new Date(el.timeStamp).getTime() ===
-              new Date(newMessage.timeStamp).getTime()
+            new Date(el.createdAt).getTime() ===
+              new Date(newMessage.createdAt).getTime()
         )
       ) {
         currentMessages = currentMessages.map((el) => {
           // replace the existing message log with this. Because this is the message which we confirmed that it is sent to the user and only the loading state will be changed
           if (
             el._id === newMessage._id &&
-            new Date(el.timeStamp).getTime() ===
-              new Date(newMessage.timeStamp).getTime()
+            new Date(el.createdAt).getTime() ===
+              new Date(newMessage.createdAt).getTime()
           ) {
             return action.payload;
           }

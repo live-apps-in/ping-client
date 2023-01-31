@@ -9,5 +9,5 @@ export enum SOCKET_QUERY_CACHE_KEYS {
 }
 
 export enum GLOBAL {
-  CHAT_PAGINATION_LENGTH = 50,
+  CHAT_PAGINATION_LENGTH = 5,
 }

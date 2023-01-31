@@ -8,6 +8,9 @@ import {
 import { USE_SOCKET_PARAMS_BASE } from "../useSocket";
 
 export interface USE_CHAT_CONNECTIONS extends USE_SOCKET_PARAMS_BASE {}
+export interface LISTEN_MESSAGE_OPTIONS {
+  onReceiveMessage: (messageDetails?: CHAT_MESSAGE_DETAILS) => any;
+}
 
 export const useChatConnections = (params: USE_CHAT_CONNECTIONS) => {
   const { socket } = params;
@@ -17,6 +20,7 @@ export const useChatConnections = (params: USE_CHAT_CONNECTIONS) => {
   function createRoom(details: ACTIVE_CHAT_DETAILS) {
     socket.emit(SOCKET_KEYS.PRIVATE_CHAT, details);
     // store in redux
+    activeChatActions.resetActiveChat();
     activeChatActions.setActiveChatDetails(details);
     activeChatActions.setActiveChatName(details.name);
     return details;
@@ -29,12 +33,13 @@ export const useChatConnections = (params: USE_CHAT_CONNECTIONS) => {
     return details;
   }
 
-  function listenMessage() {
+  function listenMessage(options?: LISTEN_MESSAGE_OPTIONS) {
     // console.log("listening");
     return socket
       .off(SOCKET_KEYS.MESSAGE)
       .on(SOCKET_KEYS.MESSAGE, (data: CHAT_MESSAGE_DETAILS) => {
         console.log(data);
+        if (options?.onReceiveMessage) options.onReceiveMessage(data);
         activeChatActions.updateMessages({
           ...data,
           isLoading: false,
