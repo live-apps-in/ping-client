@@ -85,6 +85,7 @@ export const SignupPageContent = () => {
     };
     delete updatedData.user_tag;
     try {
+      // register that this credentials are used to signup to a live apps application
       // register user with provided details
       await register({ ...details, ...apiHeaderAuthDetails });
       // once registration is complete, login the user with the refreshToken and token obtained from liveapps portal

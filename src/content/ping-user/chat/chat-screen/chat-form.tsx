@@ -61,6 +61,7 @@ export const ChatForm: React.FC = () => {
       sx: {
         margin: 0,
       },
+      autoFocus: true,
     },
   ];
   // console.log("chat details:", activeChat);
