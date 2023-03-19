@@ -76,14 +76,7 @@ export class Gateway implements IGateway {
         const refreshToken = getCookie(authConfig.refreshTokenAccessor);
         // redirect to auth route, if you don't have the refreshToken and the current route is not public route
         if (!refreshToken) {
-          deleteCookie(authConfig.tokenAccessor);
-          if (
-            !isPublicRoute(window.location.pathname) &&
-            !isAuthRoute(window.location.pathname)
-          ) {
-            window.location.pathname = authConfig.authPage;
-            return;
-          }
+          this.logout();
         } else {
           // retry api call after getting access token using the refreshToken we have
           const apiCallConfig = error.config;
@@ -105,17 +98,8 @@ export class Gateway implements IGateway {
           } catch (err) {
             // this block will be triggered, if refresh token is expired too
             if (err.response?.status === 401) {
-              deleteCookie(authConfig.tokenAccessor);
-              deleteCookie(authConfig.refreshTokenAccessor);
               // at this point the user is completely not eligible to be logged in
-              // redirect the user to auth route, if it's not auth route
-              if (
-                !isPublicRoute(window.location.pathname) &&
-                !isAuthRoute(window.location.pathname)
-              ) {
-                window.location.pathname = authConfig.authPage;
-                return;
-              }
+              this.logout();
               return Promise.reject(err);
             }
             return Promise.reject(err);
@@ -128,6 +112,19 @@ export class Gateway implements IGateway {
     });
     // return this to call other functions when this function has been implemented and stored in a variable.
     return this;
+  }
+
+  logout() {
+    deleteCookie(authConfig.tokenAccessor);
+    deleteCookie(authConfig.refreshTokenAccessor);
+    // redirect the user to auth route, if it's not auth route
+    if (
+      !isPublicRoute(window.location.pathname) &&
+      !isAuthRoute(window.location.pathname)
+    ) {
+      window.location.pathname = authConfig.authPage;
+      return;
+    }
   }
 
   updateSocketToken(token) {
